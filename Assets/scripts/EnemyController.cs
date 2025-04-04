@@ -23,6 +23,11 @@ public class EnemyController : MonoBehaviour
             Debug.LogError("No Renderer component found on this GameObject!");
         }
 
+        if (hp_img == null)
+        {
+            Debug.LogError("Health bar image not assigned! Please assign it in the inspector.");
+        }
+
         hp_img.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f); // Set the initial scale of the health bar image
         
         // Initialize color
@@ -40,9 +45,13 @@ public class EnemyController : MonoBehaviour
         if (e_health <= 0)
         {
             // wait 2 seconds before destroying the enemy
-            transform.rotation = Quaternion.Euler(0, 0, 90); // Reset rotation to default
+            // get the direction enemy is currently facing and then rotate it 90 degrees
+            // this is a bit hacky but it works for now
+            Vector3 direction = transform.forward; // Get the current forward direction of the enemy
+            Quaternion rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 0, 180); // Rotate 90 degrees
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate to the new direction
             rend.material.color = Color.red; // Change color to red
-            Destroy(gameObject, 2f); // Uncomment this line if you want to destroy the enemy after 2 seconds
+            Destroy(gameObject, 1f); // Uncomment this line if you want to destroy the enemy after 2 seconds
         }
     }
 

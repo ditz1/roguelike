@@ -25,7 +25,7 @@ public class DungeonManager : MonoBehaviour
     // this isnt the actual size of the tile prefab,
     // but rather the expected size of the prefab,
     // meaning a lower value will create more tiles and a higher value will create fewer tiles
-    public float tileSize = 3.0f;
+    public float tileSize = 6.0f;
     int regen_count = 0;
     
     // Add maximum attempts configuration to prevent infinite loops
@@ -537,9 +537,8 @@ public class DungeonManager : MonoBehaviour
         bool verticallyAligned = Mathf.Abs(exitBufferEnd.y - entryBufferStart.y) < minRoomDistance / 2;
 
         if (horizontallyAligned)
-        {
-            // If horizontally aligned, use a direct straight path
-            // Just connect directly from exit buffer to entry buffer
+        {            
+            
         }
         else if (verticallyAligned)
         {
@@ -642,13 +641,33 @@ public class DungeonManager : MonoBehaviour
 
     void InstantiateCorridors()
     {
+
+        // first, place a preemtive tile at the entrance and exit of each room
+        foreach (Room room in rooms)
+        {
+            if (room.placed)
+            {
+                Vector2 doorPos_entry = GetRoomDoorPosition(room, room.entryDir);
+                GameObject tile = Instantiate(corridor_corner, transform);
+                tile.transform.position = ConvertToWorldPosition(doorPos_entry.x - tileSize*2.5f, doorPos_entry.y + tileSize*2.5f);
+                tile.transform.localScale = new Vector3(4f, 1f, 4f);
+                tile.name = $"EntryTile_{room.type}";
+                Vector2 doorPos_exit = GetRoomDoorPosition(room, room.exitDir);
+                GameObject tile2 = Instantiate(corridor_corner, transform);
+                tile2.transform.position = ConvertToWorldPosition(doorPos_exit.x - tileSize*2.5f, doorPos_exit.y + tileSize*2.5f);
+                tile2.transform.localScale = new Vector3(4f, 1f, 4f);
+                tile2.name = $"ExitTile_{room.type}";
+                
+            }
+        }
+
         foreach (Corridor corridor in corridors)
         {
             GameObject corridorParent = new GameObject($"Corridor_{corridor.fromRoom}_to_{corridor.toRoom}");
             corridorParent.transform.parent = transform.GetChild(0); // Attach to DungeonLayout
     
             // For each segment in the corridor
-            for (int j = 0; j < corridor.points.Count - 1; j++)
+            for (int j = 0; j < corridor.points.Count - 1; ++j)
             {
                 Vector2 start = corridor.points[j];
                 Vector2 end = corridor.points[j + 1];
@@ -667,8 +686,7 @@ public class DungeonManager : MonoBehaviour
                 int tileCount = Mathf.CeilToInt(totalLength / tileSize);
                 
                 // Place tiles along the path
-                
-                for (int t = 0; t <= tileCount; t++)
+                for (int t = 0; t < tileCount; t++)
                 {
                     float distanceAlongPath = t * tileSize;
                     Vector2 tilePos2D = start + direction * distanceAlongPath;
@@ -698,17 +716,23 @@ public class DungeonManager : MonoBehaviour
 
                     GameObject tile;
                     
-                    if (t < 1 || t > tileCount - 1){
+                    if (t <= 3 || t >= tileCount - 3){
                         tile = Instantiate(corridor_corner, corridorParent.transform);
                     } else {
                         tile = Instantiate(corridor_prefab, corridorParent.transform);
                     }
                     
                     tile.name = $"Segment_{j}_Tile_{t}";
-                    tile.transform.position = ConvertToWorldPosition(tilePos2D.x, tilePos2D.y);
                     if (isHorizontal){
+                        if (t == 0){
+                            tilePos2D.x += (tileSize * 2.25f);
+                        } else {
+                            tilePos2D.x += (tileSize * 2.0f);
+                        }
                         tile.transform.rotation = Quaternion.Euler(0, 90, 0);
                     }
+                    tile.transform.position = ConvertToWorldPosition(tilePos2D.x, tilePos2D.y);
+                     
                     
                     if (!isVertical && !isHorizontal)
                     {
@@ -726,18 +750,18 @@ public class DungeonManager : MonoBehaviour
                         }
                     }
                     
-                    tile.transform.localScale = new Vector3(2f, 1f, 2f);
+                    tile.transform.localScale = new Vector3(2.0f, 1f, 2.0f);
                 }
                 
-                // Add end tile for vertical segments
-                if (isVertical && j == corridor.points.Count - 2)
-                {
-                    GameObject endTile = Instantiate(corridor_prefab, corridorParent.transform);
-                    endTile.name = $"Segment_{j}_EndTile";
-                    endTile.transform.position = ConvertToWorldPosition(end.x, end.y);
-                    endTile.transform.rotation = Quaternion.Euler(0, 0, 0);
-                    endTile.transform.localScale = new Vector3(1f, 1f, 1f);
-                }
+                // // Add end tile for vertical segments
+                // if (isVertical && j == corridor.points.Count - 2)
+                // {
+                //     GameObject endTile = Instantiate(corridor_prefab, corridorParent.transform);
+                //     endTile.name = $"Segment_{j}_EndTile";
+                //     endTile.transform.position = ConvertToWorldPosition(end.x, end.y);
+                //     endTile.transform.rotation = Quaternion.Euler(0, 0, 0);
+                //     endTile.transform.localScale = new Vector3(1f, 1f, 1f);
+                // }
             }
         }
     }
