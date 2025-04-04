@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class DungeonManager : MonoBehaviour
 {
@@ -22,6 +23,10 @@ public class DungeonManager : MonoBehaviour
     public bool useRandomSeed = true;
     public int seed = 0;
 
+    [Header("Corridor Settings")]
+    public float minCorridorLength = 40f;
+    public float maxCorridorLength = 120f;
+
     // this isnt the actual size of the tile prefab,
     // but rather the expected size of the prefab,
     // meaning a lower value will create more tiles and a higher value will create fewer tiles
@@ -33,7 +38,6 @@ public class DungeonManager : MonoBehaviour
     public int maxRoomPlacementAttempts = 100;
     // this gridSize placement can be lower, it can also be set to specifically mimic
     // the room prefab that it is trying to place
-    public int gridSizeForPlacement = 20; // Size of grid cells for room placement attempts
     
     enum Direction
     {
@@ -98,6 +102,7 @@ public class DungeonManager : MonoBehaviour
         CreateRoomDefinitions();
         
         GenerateDungeon();
+        UpdateDungeonBounds();
         
         InstantiateRoomsAndCorridors();
 
@@ -109,6 +114,8 @@ public class DungeonManager : MonoBehaviour
 
     void InstantiatePlayer()
     {
+        Destroy(GameObject.FindWithTag("Player"));
+
         // get center of spawn room coordinates
         Vector3 spawnPos = ConvertToWorldPosition(rooms[0].x + rooms[0].width / 2, rooms[0].y + rooms[0].height / 2);
         spawnPos.y = 3.0f; // player will fall a bit on spawn, but need to give time for the models to load in
@@ -276,103 +283,125 @@ public class DungeonManager : MonoBehaviour
     // Returns true if all rooms were successfully placed without collisions
     bool PlaceRoomsSequentially()
     {
-        // Divide the dungeon height into sections for each room with some overlap
-        float sectionHeight = dungeonHeight / (float)rooms.Count;
         bool allRoomsPlaced = true;
-        // this is translated from 2d, so use of vertical really means z axis
-        for (int i = 0; i < rooms.Count; i++)
+        
+        // Place spawn room first at the predetermined starting position
+        Room spawnRoom = rooms[0];
+        spawnRoom.x = dungeonWidth / 2 - spawnRoom.width / 2;
+        spawnRoom.y = dungeonHeight / 2 - spawnRoom.height / 2;
+        spawnRoom.placed = true;
+        rooms[0] = spawnRoom;
+        
+        // Place remaining rooms with constrained distances from previous rooms
+        for (int i = 1; i < rooms.Count; i++)
         {
             Room room = rooms[i];
+            Room previousRoom = rooms[i-1];
             
-            // Calculate vertical position based on room type (progressing down)
-            float verticalPos = (float)i / (rooms.Count - 1); // 0.0 for first room, 1.0 for last
+            // Try to place the room without overlaps and within corridor constraints
+            bool validPlacement = false;
+            int attempts = 0;
             
-            int midY = (int)(verticalPos * (dungeonHeight - room.height - 20) + 10);
-
-            // test random midpoint
-            //int midY = RandomRange(10, dungeonHeight - room.height - 10); 
-            // Define boundaries for room placement
-            int minY = midY - (int)(sectionHeight / 4);
-            int maxY = midY + (int)(sectionHeight / 4);
-            
-            // Keep within dungeon bounds
-            minY = Mathf.Max(minY, 10);
-            maxY = Mathf.Min(maxY, dungeonHeight - room.height - 10);
-            
-            // If this is the first room (spawn room), place it at the center of the starting area
-            if (i == 0)
+            while (!validPlacement && attempts < maxRoomPlacementAttempts)
             {
-                room.x = dungeonWidth / 2 - room.width / 2;
-                room.y = 10; // Place it near the top of the dungeon area
-                room.placed = true;
-            }
-            else
-            {
-                // Try to place the room without overlaps
-                bool validPlacement = false;
-                int attempts = 0;
+                // Generate a random distance between min and max corridor length
+                float corridorLength = RandomRange((int)minCorridorLength, (int)maxCorridorLength);
                 
-                while (!validPlacement && attempts < maxRoomPlacementAttempts)
+                // Generate a random angle (in radians) for placement
+                float angle = (float)RandomRange(0, 360) * Mathf.Deg2Rad;
+                
+                // Calculate position based on distance and angle from previous room's center
+                Vector2 prevRoomCenter = new Vector2(
+                    previousRoom.x + previousRoom.width / 2,
+                    previousRoom.y + previousRoom.height / 2
+                );
+                
+                // Calculate new room position (top-left corner)
+                int newX = (int)(prevRoomCenter.x + Mathf.Cos(angle) * corridorLength - room.width / 2);
+                int newY = (int)(prevRoomCenter.y + Mathf.Sin(angle) * corridorLength - room.height / 2);
+                
+                // Keep the room within dungeon bounds
+                newX = Mathf.Clamp(newX, 10, dungeonWidth - room.width - 10);
+                newY = Mathf.Clamp(newY, 10, dungeonHeight - room.height - 10);
+                
+                room.x = newX;
+                room.y = newY;
+                
+                // Check if the room is at an acceptable distance from all previous rooms
+                bool validDistance = true;
+                for (int j = 0; j < i; j++)
                 {
-                    room.x = RandomRange(10, dungeonWidth - 20);
-                    room.y = RandomRange(minY, maxY);
-                    
-                    validPlacement = !IsRoomOverlappingAny(room, i);
-                    attempts++;
+                    Room otherRoom = rooms[j];
+                    if (otherRoom.placed)
+                    {
+                        // Calculate center-to-center distance
+                        Vector2 otherCenter = new Vector2(
+                            otherRoom.x + otherRoom.width / 2,
+                            otherRoom.y + otherRoom.height / 2
+                        );
+                        
+                        Vector2 currentCenter = new Vector2(
+                            room.x + room.width / 2,
+                            room.y + room.height / 2
+                        );
+                        
+                        float distanceBetweenRooms = Vector2.Distance(currentCenter, otherCenter);
+                        
+                        // For previous room, ensure distance is within corridor constraints
+                        if (j == i - 1)
+                        {
+                            if (distanceBetweenRooms < minCorridorLength || distanceBetweenRooms > maxCorridorLength)
+                            {
+                                validDistance = false;
+                                break;
+                            }
+                        }
+                        // For all other rooms, just ensure no overlap
+                        else if (CheckRoomOverlap(room, otherRoom))
+                        {
+                            validDistance = false;
+                            break;
+                        }
+                    }
                 }
                 
-                // If we couldn't find a valid spot with random placement, try grid-based placement
-                if (!validPlacement)
-                {
-                    validPlacement = FindValidPositionOnGrid(room, i, minY, maxY);
-                }
-                
-                // If we still couldn't place the room, mark it as a failure but continue
-                if (!validPlacement)
-                {
-                    Debug.LogWarning($"Failed to place room {i} (type {room.type}) without collisions after {maxRoomPlacementAttempts} attempts.");
-                    allRoomsPlaced = false;
-                    
-                    // Place it anyway but mark the issue
-                    room.x = dungeonWidth / 2 - room.width / 2;
-                    room.y = midY;
-                }
-                
-                room.placed = true;
+                validPlacement = validDistance;
+                attempts++;
             }
             
-            // Assign entry and exit directions - ensuring they are on different sides
-            if (i == 0)
+            // If we couldn't find a valid spot with random placement, try grid-based placement
+            if (!validPlacement)
             {
-                // First room only has exit
-                // Set exit to SOUTH for a clear progression
-                room.exitDir = Direction.SOUTH;
+                validPlacement = FindValidPositionWithCorridorConstraints(room, i, minCorridorLength, maxCorridorLength);
             }
-            else if (i == rooms.Count - 1)
+            
+            // If we still couldn't place the room, place it at minimum distance in a random direction
+            if (!validPlacement)
             {
-                // Last room only has entry
-                // Set entry to NORTH for a clear progression
-                room.entryDir = Direction.NORTH;
+                Debug.LogWarning($"Failed to place room {i} (type {room.type}) with corridor constraints after {maxRoomPlacementAttempts} attempts.");
+                allRoomsPlaced = false;
+                
+                // Place it at minimum distance in a random direction
+                previousRoom = rooms[i-1];
+                float angle = (float)RandomRange(0, 360) * Mathf.Deg2Rad;
+                
+                Vector2 prevRoomCenter = new Vector2(
+                    previousRoom.x + previousRoom.width / 2,
+                    previousRoom.y + previousRoom.height / 2
+                );
+                
+                int newX = (int)(prevRoomCenter.x + Mathf.Cos(angle) * minCorridorLength - room.width / 2);
+                int newY = (int)(prevRoomCenter.y + Mathf.Sin(angle) * minCorridorLength - room.height / 2);
+                
+                // Keep the room within dungeon bounds
+                room.x = Mathf.Clamp(newX, 10, dungeonWidth - room.width - 10);
+                room.y = Mathf.Clamp(newY, 10, dungeonHeight - room.height - 10);
             }
-            else
-            {
-                // Middle rooms have both entry and exit
-                // For clearer progression, entry is NORTH and exit is SOUTH
-                // random entry, but exit must be opposite of entry
-                // For middle rooms - fix the comments and make the directions more consistent
-                int randomEntry = RandomRange(0, 3);
-                room.entryDir = (Direction)randomEntry;
-                int randomExit = RandomRange(1, 4);
-                room.exitDir = (Direction)randomExit;
-                if (room.entryDir == room.exitDir)
-                {
-                    // Ensure entry and exit are not the same
-                    room.exitDir = (Direction)(((int)room.exitDir + 2) % 4);
-                    if (room.exitDir == 0) room.exitDir = Direction.SOUTH;
-                }
-                //room.entryDir = Direction.NORTH;
-                //room.exitDir = Direction.SOUTH;
-            }
+            
+            room.placed = true;
+            
+            // Set entry and exit directions based on relative positions from previous room
+            AssignRoomDirections(room, previousRoom);
             
             // Update the reference in the list
             rooms[i] = room;
@@ -381,102 +410,81 @@ public class DungeonManager : MonoBehaviour
         return allRoomsPlaced;
     }
     
-    // Try to find a valid position for a room using a grid approach
-    bool FindValidPositionOnGrid(Room room, int roomIndex, int minY, int maxY)
+    // New method to find a valid position with corridor length constraints
+    bool FindValidPositionWithCorridorConstraints(Room room, int roomIndex, float minLength, float maxLength)
     {
-        // Create a grid of potential positions to try
-        for (int x = 50; x <= dungeonWidth - room.width - 50; x += gridSizeForPlacement)
+        Room previousRoom = rooms[roomIndex - 1];
+        Vector2 prevRoomCenter = new Vector2(
+            previousRoom.x + previousRoom.width / 2,
+            previousRoom.y + previousRoom.height / 2
+        );
+        
+        // Try different angles in smaller increments
+        for (int angleStep = 0; angleStep < 36; angleStep++)
         {
-            for (int y = minY; y <= maxY; y += gridSizeForPlacement)
+            float angle = (float)angleStep * 10f * Mathf.Deg2Rad;
+            
+            // Try different distances between min and max
+            for (float distance = minLength; distance <= maxLength; distance += minLength / 2)
             {
-                room.x = x;
-                room.y = y;
+                int newX = (int)(prevRoomCenter.x + Mathf.Cos(angle) * distance - room.width / 2);
+                int newY = (int)(prevRoomCenter.y + Mathf.Sin(angle) * distance - room.height / 2);
                 
-                if (!IsRoomOverlappingAny(room, roomIndex))
+                // Keep the room within dungeon bounds
+                newX = Mathf.Clamp(newX, 10, dungeonWidth - room.width - 10);
+                newY = Mathf.Clamp(newY, 10, dungeonHeight - room.height - 10);
+                
+                room.x = newX;
+                room.y = newY;
+                
+                // Check if this placement is valid
+                bool validPlacement = true;
+                for (int j = 0; j < roomIndex; j++)
                 {
-                    // Found a valid position
+                    Room otherRoom = rooms[j];
+                    if (otherRoom.placed)
+                    {
+                        // For previous room, check distance constraints
+                        if (j == roomIndex - 1)
+                        {
+                            Vector2 otherCenter = new Vector2(
+                                otherRoom.x + otherRoom.width / 2,
+                                otherRoom.y + otherRoom.height / 2
+                            );
+                            
+                            Vector2 currentCenter = new Vector2(
+                                room.x + room.width / 2,
+                                room.y + room.height / 2
+                            );
+                            
+                            float distanceBetweenRooms = Vector2.Distance(currentCenter, otherCenter);
+                            
+                            if (distanceBetweenRooms < minLength || distanceBetweenRooms > maxLength)
+                            {
+                                validPlacement = false;
+                                break;
+                            }
+                        }
+                        // For all other rooms, just ensure no overlap
+                        else if (CheckRoomOverlap(room, otherRoom))
+                        {
+                            validPlacement = false;
+                            break;
+                        }
+                    }
+                }
+                
+                if (validPlacement)
+                {
                     return true;
                 }
             }
         }
         
-        // If no valid position found, try to find the position with the least overlap
-        int bestX = 50;
-        int bestY = minY;
-        float leastOverlapArea = float.MaxValue;
-        
-        for (int x = 50; x <= dungeonWidth - room.width - 50; x += gridSizeForPlacement)
-        {
-            for (int y = minY; y <= maxY; y += gridSizeForPlacement)
-            {
-                room.x = x;
-                room.y = y;
-                
-                float overlapArea = CalculateTotalOverlapArea(room, roomIndex);
-                if (overlapArea < leastOverlapArea)
-                {
-                    leastOverlapArea = overlapArea;
-                    bestX = x;
-                    bestY = y;
-                }
-            }
-        }
-        
-        // Use the position with least overlap if we couldn't find a completely valid one
-        room.x = bestX;
-        room.y = bestY;
-        
-        // Return false since we couldn't find a completely valid position
         return false;
     }
     
-    // Calculate the total area of overlap between a room and all previously placed rooms
-    float CalculateTotalOverlapArea(Room room, int upToIndex)
-    {
-        float totalOverlapArea = 0;
-        Rect roomRect = new Rect(room.x, room.y, room.width, room.height);
 
-        for (int i = 0; i < upToIndex; i++)
-        {
-            Room placedRoom = rooms[i];
-            if (placedRoom.placed)
-            {
-                Rect placedRect = new Rect(placedRoom.x, placedRoom.y, placedRoom.width, placedRoom.height);
-
-                // Calculate the intersection rectangle
-                if (roomRect.Overlaps(placedRect))
-                {
-                    // Calculate bounds of intersection
-                    float xMin = Mathf.Max(roomRect.xMin, placedRect.xMin);
-                    float xMax = Mathf.Min(roomRect.xMax, placedRect.xMax);
-                    float yMin = Mathf.Max(roomRect.yMin, placedRect.yMin);
-                    float yMax = Mathf.Min(roomRect.yMax, placedRect.yMax);
-
-                    // Calculate area
-                    float width = xMax - xMin;
-                    float height = yMax - yMin;
-                    totalOverlapArea += width * height;
-                }
-            }
-        }
-
-        return totalOverlapArea;
-    }
-    
-    // Check if a room overlaps with any previously placed rooms
-    bool IsRoomOverlappingAny(Room room, int upToIndex)
-    {
-        for (int i = 0; i < upToIndex; i++)
-        {
-            Room placedRoom = rooms[i];
-            if (placedRoom.placed && CheckRoomOverlap(room, placedRoom))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
     // Check if two rooms overlap or are too close
     bool CheckRoomOverlap(Room a, Room b)
     {
@@ -516,41 +524,31 @@ public class DungeonManager : MonoBehaviour
         Vector2 startPos = GetRoomDoorPosition(fromRoom, fromRoom.exitDir);
         Vector2 endPos = GetRoomDoorPosition(toRoom, toRoom.entryDir);
 
-        // Create buffer/walkway extending from exit door
-        Vector2 exitBufferEnd = GetBufferEndPoint(startPos, GetOppositeDirection(fromRoom.exitDir), 4 * tileSize);
-
-        // Create buffer/walkway leading to entry door
-        Vector2 entryBufferStart = GetBufferEndPoint(endPos, GetOppositeDirection(toRoom.entryDir), 4 * tileSize);
-
         // Add starting point (room exit)
         corridor.points.Add(startPos);
 
-        // Add exit buffer endpoint
+        // Create buffer/walkway extending from exit door
+        Vector2 exitBufferEnd = GetBufferEndPoint(startPos, fromRoom.exitDir, 3 * tileSize);
         corridor.points.Add(exitBufferEnd);
 
-        // For a SOUTH to NORTH corridor (standard progression)
-        // Create a path with proper corners connecting the buffers
-        float midY = (exitBufferEnd.y + entryBufferStart.y) / 2;
+        // Create buffer/walkway leading to entry door
+        Vector2 entryBufferStart = GetBufferEndPoint(endPos, toRoom.entryDir, 3 * tileSize);
 
-        // Check if buffers are roughly aligned horizontally or vertically
-        bool horizontallyAligned = Mathf.Abs(exitBufferEnd.x - entryBufferStart.x) < minRoomDistance / 2;
-        bool verticallyAligned = Mathf.Abs(exitBufferEnd.y - entryBufferStart.y) < minRoomDistance / 2;
+        // Only create straight corridors with right-angle turns
+        // First, determine if we need to make a turn
+        bool needsHorizontalFirst = ShouldGoHorizontalFirst(fromRoom.exitDir, toRoom.entryDir);
 
-        if (horizontallyAligned)
-        {            
-            
-        }
-        else if (verticallyAligned)
+        if (needsHorizontalFirst)
         {
-            // If vertically aligned, use a horizontal path
-            corridor.points.Add(new Vector2(exitBufferEnd.x, exitBufferEnd.y));
-            corridor.points.Add(new Vector2(entryBufferStart.x, exitBufferEnd.y));
+            // Go horizontal first, then vertical
+            Vector2 cornerPoint = new Vector2(entryBufferStart.x, exitBufferEnd.y);
+            corridor.points.Add(cornerPoint);
         }
         else
         {
-            // Otherwise, use a z-shaped path
-            corridor.points.Add(new Vector2(exitBufferEnd.x, midY));
-            corridor.points.Add(new Vector2(entryBufferStart.x, midY));
+            // Go vertical first, then horizontal
+            Vector2 cornerPoint = new Vector2(exitBufferEnd.x, entryBufferStart.y);
+            corridor.points.Add(cornerPoint);
         }
 
         // Add entry buffer start point
@@ -560,6 +558,76 @@ public class DungeonManager : MonoBehaviour
         corridor.points.Add(endPos);
 
         corridors.Add(corridor);
+    }
+
+    // Helper method to determine if we should go horizontal first
+    bool ShouldGoHorizontalFirst(Direction exitDir, Direction entryDir)
+    {
+        // If exit is East/West, go horizontal first
+        if (exitDir == Direction.EAST || exitDir == Direction.WEST)
+            return true;
+
+        // If exit is North/South, go vertical first
+        if (exitDir == Direction.NORTH || exitDir == Direction.SOUTH)
+            return false;
+
+        // Default to horizontal first
+        return true;
+    }
+
+    // New method to calculate a good corner point for corridors
+    void AssignRoomDirections(Room current, Room previous)
+    {
+        // Get centers of both rooms
+        Vector2 currentCenter = new Vector2(current.x + current.width / 2, current.y + current.height / 2);
+        Vector2 previousCenter = new Vector2(previous.x + previous.width / 2, previous.y + previous.height / 2);
+
+        // Calculate horizontal and vertical differences
+        float xDiff = currentCenter.x - previousCenter.x;
+        float yDiff = currentCenter.y - previousCenter.y;
+
+        // Determine if the connection should be horizontal or vertical
+        bool connectHorizontally = Mathf.Abs(xDiff) >= Mathf.Abs(yDiff);
+
+        if (connectHorizontally)
+        {
+            // Connect horizontally
+            if (xDiff > 0)
+            {
+                previous.exitDir = Direction.EAST;
+                current.entryDir = Direction.WEST;
+            }
+            else
+            {
+                previous.exitDir = Direction.WEST;
+                current.entryDir = Direction.EAST;
+            }
+        }
+        else
+        {
+            // Connect vertically
+            if (yDiff > 0)
+            {
+                previous.exitDir = Direction.SOUTH;
+                current.entryDir = Direction.NORTH;
+            }
+            else
+            {
+                previous.exitDir = Direction.NORTH;
+                current.entryDir = Direction.SOUTH;
+            }
+        }
+
+        // Set a random exit direction for current room if it's not the last room
+        if (current.type != rooms.Count - 1)
+        {
+            List<Direction> possibleDirections = new List<Direction>
+            {
+                Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST
+            };
+            possibleDirections.Remove(current.entryDir);
+            current.exitDir = possibleDirections[RandomRange(0, possibleDirections.Count)];
+        }
     }
 
     // Calculate buffer endpoint based on starting position and direction
@@ -650,12 +718,14 @@ public class DungeonManager : MonoBehaviour
                 Vector2 doorPos_entry = GetRoomDoorPosition(room, room.entryDir);
                 GameObject tile = Instantiate(corridor_corner, transform);
                 tile.transform.position = ConvertToWorldPosition(doorPos_entry.x - tileSize*2.5f, doorPos_entry.y + tileSize*2.5f);
-                tile.transform.localScale = new Vector3(4f, 1f, 4f);
+                tile.transform.Translate(0, 0.05f, 0);
+                tile.transform.localScale = new Vector3(4f, 3f, 4f);
                 tile.name = $"EntryTile_{room.type}";
                 Vector2 doorPos_exit = GetRoomDoorPosition(room, room.exitDir);
                 GameObject tile2 = Instantiate(corridor_corner, transform);
                 tile2.transform.position = ConvertToWorldPosition(doorPos_exit.x - tileSize*2.5f, doorPos_exit.y + tileSize*2.5f);
-                tile2.transform.localScale = new Vector3(4f, 1f, 4f);
+                tile.transform.Translate(0, 0.05f, 0);
+                tile2.transform.localScale = new Vector3(4f, 3f, 4f);
                 tile2.name = $"ExitTile_{room.type}";
                 
             }
@@ -665,32 +735,39 @@ public class DungeonManager : MonoBehaviour
         {
             GameObject corridorParent = new GameObject($"Corridor_{corridor.fromRoom}_to_{corridor.toRoom}");
             corridorParent.transform.parent = transform.GetChild(0); // Attach to DungeonLayout
-    
+
             // For each segment in the corridor
             for (int j = 0; j < corridor.points.Count - 1; ++j)
             {
                 Vector2 start = corridor.points[j];
                 Vector2 end = corridor.points[j + 1];
-    
+
                 // Skip zero-length segments
                 if (Vector2.Distance(start, end) < 0.1f) continue;
-    
+
                 bool isVertical = Mathf.Approximately(start.x, end.x);
                 bool isHorizontal = Mathf.Approximately(start.y, end.y);
-                
+
+                // Skip diagonal segments (should not happen with the new generation)
+                if (!isVertical && !isHorizontal)
+                {
+                    Debug.LogWarning("Diagonal corridor segment detected! Should not happen with straight corridors only.");
+                    continue;
+                }
+
                 // Direction and length
                 Vector2 direction = (end - start).normalized;
                 float totalLength = Vector2.Distance(start, end);
-                
+
                 // Calculate how many tiles we need
                 int tileCount = Mathf.CeilToInt(totalLength / tileSize);
-                
+
                 // Place tiles along the path
                 for (int t = 0; t < tileCount; t++)
                 {
                     float distanceAlongPath = t * tileSize;
                     Vector2 tilePos2D = start + direction * distanceAlongPath;
-                    
+
                     // Skip this tile if it's inside a room (except start/end rooms)
                     bool tileInRoom = false;
                     foreach (Room room in rooms)
@@ -701,7 +778,7 @@ public class DungeonManager : MonoBehaviour
                             // Allow tiles at the edge of these rooms (for doors)
                             continue;
                         }
-                        
+
                         // Check if tile is inside any other room
                         Rect roomBounds = new Rect(room.x, room.y, room.width, room.height);
                         if (roomBounds.Contains(tilePos2D))
@@ -710,60 +787,55 @@ public class DungeonManager : MonoBehaviour
                             break;
                         }
                     }
-                    
+
                     if (tileInRoom)
                         continue;
 
+                    // Choose tile prefab based on position in the corridor
                     GameObject tile;
-                    
-                    if (t <= 3 || t >= tileCount - 3){
+                    if (t <= 3 || t >= tileCount - 3)
+                    {
                         tile = Instantiate(corridor_corner, corridorParent.transform);
-                    } else {
+                    }
+                    else
+                    {
                         tile = Instantiate(corridor_prefab, corridorParent.transform);
                     }
-                    
+
                     tile.name = $"Segment_{j}_Tile_{t}";
-                    if (isHorizontal){
-                        if (t == 0){
-                            tilePos2D.x += (tileSize * 2.25f);
-                        } else {
-                            tilePos2D.x += (tileSize * 2.0f);
-                        }
-                        tile.transform.rotation = Quaternion.Euler(0, 90, 0);
-                    }
-                    tile.transform.position = ConvertToWorldPosition(tilePos2D.x, tilePos2D.y);
-                     
-                    
-                    if (!isVertical && !isHorizontal)
+
+                    // Set position and rotation
+                    if (isHorizontal)
                     {
-                        // For diagonal segments, choose closest cardinal direction
-                        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                        if (Mathf.Abs(angle) < 45 || Mathf.Abs(angle) > 135)
+                        // Adjust horizontal corridors
+                        if (t == 0)
                         {
-                            // More horizontal
-                            tile.transform.rotation = Quaternion.Euler(0, 0, 0);
+                            tilePos2D.x += tileSize * 2.25f;
                         }
                         else
                         {
-                            // More vertical
-                            tile.transform.rotation = Quaternion.Euler(0, 0, 0);
+                            tilePos2D.x += tileSize * 2.0f;
                         }
+                        tile.transform.rotation = Quaternion.Euler(0, 90, 0);
                     }
-                    
-                    tile.transform.localScale = new Vector3(2.0f, 1f, 2.0f);
+                    else
+                    {
+                        // Vertical corridors don't need special rotation
+                        tile.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    }
+
+                    tile.transform.position = ConvertToWorldPosition(tilePos2D.x, tilePos2D.y);
+
+                    if (t <= 3 || t >= tileCount - 3)
+                    {
+                        tile.transform.Translate(0, 0.15f, 0);
+                    }
+
+                    tile.transform.localScale = new Vector3(2.0f, 3f, 2.0f);
                 }
-                
-                // // Add end tile for vertical segments
-                // if (isVertical && j == corridor.points.Count - 2)
-                // {
-                //     GameObject endTile = Instantiate(corridor_prefab, corridorParent.transform);
-                //     endTile.name = $"Segment_{j}_EndTile";
-                //     endTile.transform.position = ConvertToWorldPosition(end.x, end.y);
-                //     endTile.transform.rotation = Quaternion.Euler(0, 0, 0);
-                //     endTile.transform.localScale = new Vector3(1f, 1f, 1f);
-                // }
             }
         }
+
     }
 
     void InstantiateWalls(Room room)
@@ -832,6 +904,55 @@ public class DungeonManager : MonoBehaviour
         // Create corridors as a separate step
         InstantiateCorridors();
     }
+
+    void UpdateDungeonBounds()
+    {
+        // Start with the minimum required size for the spawn room
+        int minX = rooms[0].x;
+        int maxX = rooms[0].x + rooms[0].width;
+        int minY = rooms[0].y;
+        int maxY = rooms[0].y + rooms[0].height;
+
+        // Expand bounds to include all placed rooms plus a margin
+        int margin = minRoomDistance * 2;
+        foreach (Room room in rooms)
+        {
+            if (room.placed)
+            {
+                minX = Mathf.Min(minX, room.x - margin);
+                maxX = Mathf.Max(maxX, room.x + room.width + margin);
+                minY = Mathf.Min(minY, room.y - margin);
+                maxY = Mathf.Max(maxY, room.y + room.height + margin);
+            }
+        }
+
+        // Update dungeon dimensions
+        dungeonWidth = maxX - minX;
+        dungeonHeight = maxY - minY;
+
+        // Adjust room positions relative to new origin
+        int offsetX = -minX;
+        int offsetY = -minY;
+
+        foreach (Room room in rooms)
+        {
+            if (room.placed)
+            {
+                room.x += offsetX;
+                room.y += offsetY;
+            }
+        }
+
+        // Adjust corridor points
+        foreach (Corridor corridor in corridors)
+        {
+            for (int i = 0; i < corridor.points.Count; i++)
+            {
+                Vector2 point = corridor.points[i];
+                corridor.points[i] = new Vector2(point.x + offsetX, point.y + offsetY);
+            }
+        }
+    }
     
     int RandomRange(int min, int max)
     {
@@ -842,6 +963,7 @@ public class DungeonManager : MonoBehaviour
     [ContextMenu("Regenerate Dungeon")]
     public void RegenerateDungeon()
     {
+        Destroy(GameObject.FindWithTag("Player"));
         regen_count++;
         // Update dungeon origin if starting point has moved
         if (starting_point != null)
@@ -855,9 +977,11 @@ public class DungeonManager : MonoBehaviour
             seed = Math.Abs((int)(DateTime.Now.Ticks % int.MaxValue));
         }
 
-        if (regen_count > 100){
-            Debug.Log("100 tries passed, extending dungeon limits");
-            dungeonHeight += 10;
+        if (regen_count % 20 == 0){
+            Debug.Log("20 tries passed, extending dungeon limits");
+            dungeonHeight += 20;
+            dungeonWidth += 20;
+
         }
 
         Debug.Log("Regenerating dungeon with seed: " + seed);
@@ -883,9 +1007,11 @@ public class DungeonManager : MonoBehaviour
     private IEnumerator RegenerationCoroutine()
     {
         yield return new WaitForEndOfFrame();
+        Destroy(GameObject.FindWithTag("Player"));
 
         CreateRoomDefinitions();
         GenerateDungeon(); 
+        UpdateDungeonBounds();
 
         Debug.Log($"Generated {rooms.Count} rooms and {corridors.Count} corridors");
 
