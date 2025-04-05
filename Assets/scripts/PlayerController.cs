@@ -10,9 +10,9 @@ public class PlayerController : MonoBehaviour
     Camera cam;
     public GameObject bullet;
    
-    public float maxPlatformHeight = 0.5f;  
-    public float platformCheckDistance = 0.8f;  
-    public float climbSpeed = 5.0f; 
+    float maxPlatformHeight = 0.65f;  
+    float platformCheckDistance = 2.6f;  
+    public float climbSpeed = 10.0f; 
 
     private bool isClimbing = false;
     private Vector3 climbTargetPosition;
@@ -26,8 +26,11 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 2.0f;
     private float xRotation = 0f;
 
-    float p_max_velocity = 5.0f;
-    float p_move_speed = 1.0f;
+    float p_max_velocity = 18.0f;
+    float p_move_speed = 8.5f;
+    bool isGrounded = false;
+
+    float gravity_scalar = 0.5f;
     
     void Start()
     {
@@ -52,6 +55,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Always check for ground
+        RaycastHit hit;
+        isGrounded = Physics.Raycast(rb.transform.position, Vector3.down, out hit, 1.1f);
+
+        Debug.DrawRay(rb.transform.position, Vector3.down * 1.1f, Color.green);
+
+
+        // increase gravity effect on player        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Cursor.lockState = CursorLockMode.None;
@@ -71,7 +82,8 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(player_look.origin, player_look.direction * 100, Color.red);
         
         Move();
-        
+        rb.AddForce(Physics.gravity * gravity_scalar, ForceMode.Acceleration);
+
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
         
@@ -84,174 +96,113 @@ public class PlayerController : MonoBehaviour
 
     void Move() 
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            if (rb.linearVelocity.magnitude > p_max_velocity)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * p_max_velocity;
-            } else {
-                rb.linearVelocity += transform.forward * p_move_speed;
-            }
-            if (!isClimbing){
-                CheckForPlatform();
-            }
-            if (isClimbing)
-            {
-                ClimbPlatform();
-            }
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            if (rb.linearVelocity.magnitude > p_max_velocity)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * p_max_velocity;
-            } else {
-                rb.linearVelocity += -transform.forward * p_move_speed;
-            }
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            if (rb.linearVelocity.magnitude > p_max_velocity)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * p_max_velocity;
-            } else {
-                rb.linearVelocity += -transform.right * p_move_speed;
-            }
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            if (rb.linearVelocity.magnitude > p_max_velocity)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * p_max_velocity;
-            } else {
-                rb.linearVelocity += transform.right * p_move_speed;
-            }
-        }
-        if (Input.GetKey(KeyCode.Space))
-        {
-            if (rb.linearVelocity.magnitude > p_max_velocity)
-            {
-                rb.linearVelocity = rb.linearVelocity.normalized * p_max_velocity;
-            } else {
-                rb.AddForce(Vector3.up * p_move_speed, ForceMode.VelocityChange);
-            }
-        }
-    }
+        float jump_force = 10.0f;
 
-    
-    void MoveUpPlatform()
-    {
-        // checks right in front of the player and if the object's height
-        // is less than some value, move the player up
-        RaycastHit hit;
-        // get player position and direction
-        player_look.origin = cam.transform.position;
-        player_look.direction = cam.transform.forward;
-        // get a position from slightly forward in the direction the player is looking
-        Vector3 forward = cam.transform.position + cam.transform.forward * 0.5f;
-        // shoot raycast straight down from the forward position
-        if (Physics.Raycast(forward, Vector3.down, out hit, 1.0f))
+        // --- Horizontal movement ---
+        Vector3 inputDir = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W)) inputDir += transform.forward;
+        if (Input.GetKey(KeyCode.S)) inputDir -= transform.forward;
+        if (Input.GetKey(KeyCode.A)) inputDir -= transform.right;
+        if (Input.GetKey(KeyCode.D)) inputDir += transform.right;
+
+        Vector3 velocity = rb.linearVelocity;
+
+        // Apply horizontal movement
+        if (inputDir != Vector3.zero)
         {
-            // check if the object is a platform and if the height is less than some value
-            if (hit.distance < 1.0f)
-            {
-                // move the player up to the platform's height
-                transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
-            }
+            inputDir.Normalize();
+            Vector3 targetVelocity = inputDir * p_move_speed;
+
+            // Preserve vertical velocity
+            velocity.x = targetVelocity.x;
+            velocity.z = targetVelocity.z;
+        }
+        else
+        {
+            // Apply friction when no input, preserve Y
+            velocity.x = Mathf.Lerp(velocity.x, 0, Time.deltaTime * 5f);
+            velocity.z = Mathf.Lerp(velocity.z, 0, Time.deltaTime * 5f);
         }
 
-        // draw raycast for debugging
-        Debug.DrawRay(forward, Vector3.down * 1.0f, Color.green);
+        // Apply jump
+        if (Input.GetKey(KeyCode.Space) && isGrounded)
+        {
+            Debug.Log("Jumping!");
+            velocity.y = jump_force;  // replace Y velocity instead of adding force
+            isGrounded = false;
+        }
+
+        // Assign modified velocity back to Rigidbody
+        rb.linearVelocity = velocity;
+
+        // Platform climbing logic
+        if (!isClimbing)
+        {
+            CheckForPlatform();
+        }
+        if (isClimbing)
+        {
+            ClimbPlatform();
+        }
     }
    
     void CheckForPlatform()
     {
-        // Create ray starting position (at player's feet)
-        Vector3 rayStart = transform.position;
-        // Use the collider's height if available, otherwise estimate based on renderer bounds
-        float playerHeight = 2.0f; // Default height estimate
-        
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-        {
-            playerHeight = col.bounds.size.y;
-        }
-        else
-        {
-            Renderer rend = GetComponent<Renderer>();
-            if (rend != null)
-            {
-                playerHeight = rend.bounds.size.y;
-            }
-        }
-        
-        rayStart.y -= playerHeight/2 - 0.1f;  // Offset to feet position
-
-        // Direction to check (forward)
-        Vector3 forwardDir = transform.forward;
-
-        // Position to check for platform (slightly ahead of player)
-        Vector3 forwardPos = rayStart + forwardDir * platformCheckDistance;
-
-        // Draw debug rays
-        Debug.DrawLine(rayStart, forwardPos, Color.blue, 0.1f);
-        Debug.DrawRay(forwardPos, Vector3.down * maxPlatformHeight * 2f, Color.red, 0.1f);
-        Debug.DrawRay(forwardPos, Vector3.up * maxPlatformHeight, Color.green, 0.1f);
-
-        RaycastHit downHit;
-        RaycastHit upHit;
-
-        // First check if there's something above our forward position
-        // that would block the player from moving forward
-        if (Physics.Raycast(forwardPos, Vector3.up, out upHit, maxPlatformHeight * 2f))
-        {
-            // Something is in the way above, can't climb
+        // Only check when moving
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && 
+            !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             return;
-        }
 
-        // Check downward from the forward position to find platform
-        if (Physics.Raycast(forwardPos, Vector3.down, out downHit, maxPlatformHeight * 2f))
+        // Get player height
+        float playerHeight = 1.0f;
+        Collider col = GetComponent<Collider>();
+        if (col != null) playerHeight = col.bounds.size.y;
+
+        // Get movement direction
+        Vector3 moveDir = Vector3.zero;
+        if (Input.GetKey(KeyCode.W)) moveDir += transform.forward;
+        if (Input.GetKey(KeyCode.S)) moveDir -= transform.forward;
+        if (Input.GetKey(KeyCode.A)) moveDir -= transform.right;
+        if (Input.GetKey(KeyCode.D)) moveDir += transform.right;
+
+        // Position in front of player
+        Vector3 forwardPos = transform.position + moveDir * 1.0f;
+        forwardPos.y -= 0.3f; // some offset;
+
+        // Simple raycast down from that position
+        RaycastHit hit;
+        if (Physics.Raycast(forwardPos, Vector3.down, out hit, 0.5f))
         {
-            float heightDifference = downHit.point.y - rayStart.y;
-
-            // If platform is higher than current position but within climb range
-            if (heightDifference > 0 && heightDifference <= maxPlatformHeight)
+            // If we hit something, climb it
+            climbTargetPosition = new Vector3(
+                forwardPos.x, 
+                hit.point.y + playerHeight/2,
+                forwardPos.z
+            );
+            float distance_to_target = Vector3.Distance(forwardPos, hit.point);
+            Debug.Log("Distance to target: " + distance_to_target);
+            if (distance_to_target < maxPlatformHeight)
             {
-                // Platform detected! Set target position on top of platform
-                climbTargetPosition = new Vector3(
-                    forwardPos.x,
-                    downHit.point.y + playerHeight/2,
-                    forwardPos.z
-                );
-
+                // Move player up to the platform's height
+                transform.position = Vector3.MoveTowards(transform.position, climbTargetPosition, Time.deltaTime * climbSpeed);
                 isClimbing = true;
-                Debug.Log("Platform detected! Height difference: " + heightDifference);
-
-                // Disable physics while climbing
-                rb.isKinematic = true;
             }
+
+            isClimbing = true;
         }
+
+        // Debug ray
+        Debug.DrawRay(forwardPos, Vector3.down, Color.yellow, 0.1f);
     }
 
     void ClimbPlatform()
-    {
-        // Move player smoothly to the target position
-        transform.position = Vector3.Lerp(
-            transform.position,
-            climbTargetPosition,
-            Time.deltaTime * climbSpeed
-        );
-
-        // Check if we've reached the target position
-        if (Vector3.Distance(transform.position, climbTargetPosition) < 0.05f)
-        {
-            isClimbing = false;
-            
-            // Re-enable physics
-            rb.isKinematic = false;
-
-            Debug.Log("Platform climb complete!");
-        }
+    {        
+        // dont bother with smoothing, just move them up
+        transform.position = new Vector3(transform.position.x, transform.position.y + 0.2f, transform.position.z);
+        isClimbing = false;    
+        Debug.Log("Platform climb complete!");
+        
     }
 
     void FireBullet()
