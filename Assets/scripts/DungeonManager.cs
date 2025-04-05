@@ -13,6 +13,7 @@ public class DungeonManager : MonoBehaviour
     public GameObject platform_prefab;
     public GameObject wall_prefab;
     public GameObject player_prefab;
+    public GameObject checkpointManagerPrefab;
     
     [Header("Dungeon Settings")]
     public int dungeonWidth = 600;
@@ -109,14 +110,26 @@ public class DungeonManager : MonoBehaviour
         // if the number of colliding tiles is above a certain threshold, regenerate.
         // for now, this will just regenerate the dungeon until it finds a valid one
         CheckCorridorRoomCollisions();
+        
+        RegenerateDungeon();
     }
 
     void InstantiatePlayer()
     {
         // get center of spawn room coordinates
-        Vector3 spawnPos = ConvertToWorldPosition(rooms[0].x + rooms[0].width / 2, rooms[0].y + rooms[0].height / 2);
-        spawnPos.y = 3.0f; // player will fall a bit on spawn, but need to give time for the models to load in
-        GameObject player = Instantiate(player_prefab, spawnPos, Quaternion.identity);
+        if (GameObject.Find("Player") == null)
+        {
+            Vector3 spawnPos = ConvertToWorldPosition(rooms[0].x + rooms[0].width / 2, rooms[0].y + rooms[0].height / 2);
+            spawnPos.y = 3.0f; // player will fall a bit on spawn, but need to give time for the models to load in
+            GameObject player = Instantiate(player_prefab, spawnPos, Quaternion.identity);
+        } else {
+            GameObject player = GameObject.Find("Player");
+            Vector3 spawnPos = ConvertToWorldPosition(rooms[0].x + rooms[0].width / 2, rooms[0].y + rooms[0].height / 2);
+            spawnPos.y = 3.0f; // player will fall a bit on spawn, but need to give time for the models to load in
+            player.transform.position = spawnPos;
+            player.transform.rotation = Quaternion.identity;
+        }
+       
     }
 
     void CheckCorridorRoomCollisions()
@@ -212,6 +225,7 @@ public class DungeonManager : MonoBehaviour
             RegenerateDungeon();
         } else {
             // Valid Stage found, instantiate player
+            Destroy(GameObject.FindWithTag("Player"));
             InstantiatePlayer();
         }
     }
@@ -221,20 +235,23 @@ public class DungeonManager : MonoBehaviour
     {
         // Clear any existing rooms
         rooms.Clear();
+
+        List<int> room_sizes = new List<int>();
+        room_sizes.Add(20); // Spawn room
+        room_sizes.Add(25); // Entry room
+        room_sizes.Add(70); // Ballroom
+        room_sizes.Add(25); // Shop
+        //room_sizes.Add(25); // Boss room
+        //room_sizes.Add(30);
+        room_sizes.Add(20); // Exit room
         
-        // Define room sizes
-        int spawnSize = 20;
-        int entrySize = 25;
-        int ballroomSize = 70;
-        int shopSize = 25;
-        int exitSize = 20;
-        
-        // Add rooms with their types (0 = spawn, 1 = entry, etc.)
-        AddRoom(spawnSize, spawnSize, 0);       // Spawn room
-        AddRoom(entrySize, entrySize, 1);       // Entry room
-        AddRoom(ballroomSize, ballroomSize, 2); // Ballroom
-        AddRoom(shopSize, shopSize, 3);         // Shop
-        AddRoom(exitSize, exitSize, 4);         // Exit
+
+        for (int i = 0; i < room_sizes.Count; i++)
+        {
+            int roomSize = room_sizes[i];
+            int roomType = i;
+            AddRoom(roomSize, roomSize, roomType);
+        }
     }
     
     // Add a room of specific type and size
@@ -305,26 +322,26 @@ public class DungeonManager : MonoBehaviour
             {
                 case Direction.NORTH:
                     // Previous exit is North, so new room entry is South
-                    newRoomPos.x = previousDoor.x - room.width / 2; // Center horizontally with the door
-                    newRoomPos.y = previousDoor.y - corridorLength - room.height; // Place above previous with gap
+                    newRoomPos.x = previousDoor.x - room.width / 2; 
+                    newRoomPos.y = previousDoor.y - corridorLength - room.height;
                     break;
 
                 case Direction.SOUTH:
                     // Previous exit is South, so new room entry is North
-                    newRoomPos.x = previousDoor.x - room.width / 2; // Center horizontally with the door
-                    newRoomPos.y = previousDoor.y + corridorLength; // Place below previous with gap
+                    newRoomPos.x = previousDoor.x - room.width / 2; 
+                    newRoomPos.y = previousDoor.y + corridorLength;
                     break;
 
                 case Direction.EAST:
                     // Previous exit is East, so new room entry is West
-                    newRoomPos.x = previousDoor.x + corridorLength; // Place to the right with gap
-                    newRoomPos.y = previousDoor.y - room.height / 2; // Center vertically with the door
+                    newRoomPos.x = previousDoor.x + corridorLength; 
+                    newRoomPos.y = previousDoor.y - room.height / 2; 
                     break;
 
                 case Direction.WEST:
                     // Previous exit is West, so new room entry is East
-                    newRoomPos.x = previousDoor.x - corridorLength - room.width; // Place to the left with gap
-                    newRoomPos.y = previousDoor.y - room.height / 2; // Center vertically with the door
+                    newRoomPos.x = previousDoor.x - corridorLength - room.width;
+                    newRoomPos.y = previousDoor.y - room.height / 2; 
                     break;
             }
 
@@ -495,7 +512,17 @@ public class DungeonManager : MonoBehaviour
                 };
                 possibleExitDirs.Remove(room.entryDir);
                 room.exitDir = possibleExitDirs[RandomRange(0, possibleExitDirs.Count)];
+
+                // cannot allow to have the same direction exit 3 times in a row
+                if (i > 2 && room.exitDir == rooms[i-1].exitDir && room.exitDir == rooms[i-2].exitDir)
+                {
+                    // Force a different exit direction
+                    possibleExitDirs.Remove(room.exitDir);
+                    room.exitDir = possibleExitDirs[RandomRange(0, possibleExitDirs.Count)];
+                }
             }
+
+            
 
             room.placed = true;
             rooms[i] = room;
@@ -503,6 +530,7 @@ public class DungeonManager : MonoBehaviour
 
         return allRoomsPlaced;
     }
+
 
     // Simplify corridor creation to use straight paths
     void ConnectRooms(int fromIdx, int toIdx)
@@ -677,8 +705,6 @@ public class DungeonManager : MonoBehaviour
         }
     }
     
-    
-
     // Get the opposite direction
     Direction GetOppositeDirection(Direction dir)
     {
@@ -745,7 +771,7 @@ public class DungeonManager : MonoBehaviour
                     tile.transform.position = ConvertToWorldPosition(doorPos_entry.x - tileSize*2.0f, doorPos_entry.y + tileSize*2.0f);
                     tile.transform.Translate(0, 0.2f, 0);
                     tile.transform.localScale = new Vector3(4f, 1f, 4f);
-                    tile.name = $"EntryTile_{room.type}";
+                    tile.name = $"EntryTile_{room.type}_{room.entryDir}";
                 }
                 
                 // Create exit door tile if this isn't the last room
@@ -756,7 +782,7 @@ public class DungeonManager : MonoBehaviour
                     tile2.transform.position = ConvertToWorldPosition(doorPos_exit.x - tileSize*2.0f, doorPos_exit.y + tileSize*2.0f);
                     tile2.transform.Translate(0, 0.2f, 0);
                     tile2.transform.localScale = new Vector3(4f, 1f, 4f);
-                    tile2.name = $"ExitTile_{room.type}";
+                    tile2.name = $"ExitTile_{room.type}_{room.exitDir}";
                 }
             }
         }
@@ -928,6 +954,8 @@ public class DungeonManager : MonoBehaviour
 
         // Create corridors as a separate step
         InstantiateCorridors();
+
+        SpawnCheckpointManager();
     }
     
     int RandomRange(int min, int max)
@@ -984,6 +1012,7 @@ public class DungeonManager : MonoBehaviour
         Debug.Log($"Generated {rooms.Count} rooms and {corridors.Count} corridors");
 
         InstantiateRoomsAndCorridors();
+        Destroy(GameObject.FindWithTag("Player"));
         CheckCorridorRoomCollisions();
     }
     
@@ -993,6 +1022,33 @@ public class DungeonManager : MonoBehaviour
         if (starting_point != null)
         {
             dungeonOrigin = starting_point.transform.position;
+        }
+    }
+
+    void SpawnCheckpointManager()
+    {
+        if (checkpointManagerPrefab != null)
+        {
+            GameObject checkpointManagerObj = Instantiate(checkpointManagerPrefab, transform.position, Quaternion.identity);
+            checkpointManagerObj.name = "CheckpointManager";
+            checkpointManagerObj.transform.parent = transform;
+
+            // Get the CheckpointManager component
+            CheckpointManager checkpointManager = checkpointManagerObj.GetComponent<CheckpointManager>();
+
+            if (checkpointManager != null)
+            {
+                // Now that it's instantiated, it will find the entry/exit tiles in its Start method
+                Debug.Log("Checkpoint Manager spawned successfully");
+            }
+            else
+            {
+                Debug.LogError("CheckpointManager component not found on prefab!");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No CheckpointManager prefab assigned to DungeonManager!");
         }
     }
     

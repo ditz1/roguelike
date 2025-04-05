@@ -67,7 +67,9 @@
     <Compile Include="Assets/scripts/EnemyController.cs" />
     <Compile Include="Assets/scripts/DungeonManager.cs" />
     <Compile Include="Assets/scripts/PlayerController.cs" />
+    <Compile Include="Assets/scripts/CheckpointLogic.cs" />
     <Compile Include="Assets/scripts/EnemyBomber.cs" />
+    <Compile Include="Assets/scripts/CheckpointManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
