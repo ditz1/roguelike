@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bullet;
    
     float maxPlatformHeight = 0.65f;  
-    float platformCheckDistance = 2.6f;  
+    //float platformCheckDistance = 2.6f;  
     public float climbSpeed = 10.0f; 
 
     private bool isClimbing = false;
@@ -26,32 +26,62 @@ public class PlayerController : MonoBehaviour
     public float mouseSensitivity = 2.0f;
     private float xRotation = 0f;
 
-    float p_max_velocity = 18.0f;
+    //float p_max_velocity = 18.0f;
     float p_move_speed = 8.5f;
     bool isGrounded = false;
 
     float gravity_scalar = 0.5f;
+
+    GameObject right_hand;
+    GameObject left_hand;
+    GameObject weapon_rh_pos;
+    GameObject weapon_lh_pos;
     
     void Start()
     {
+        // this is just needed for debugging
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate();
+        }
         weapon = FindWeapon();
-        
         rb = GetComponent<Rigidbody>();
         cam = Camera.main;
         player_look = new Ray(cam.transform.position, cam.transform.forward);
-        
-        // If bulletSpawnPoint wasn't assigned, create one at weapon tip
-        if (bulletSpawnPoint == null && weapon != null)
+
+        if (weapon != null)
         {
-            // Create spawn point at end of weapon
-            GameObject spawnPointObj = new GameObject("BulletSpawnPoint");
-            spawnPointObj.transform.parent = weapon.transform;
-            spawnPointObj.transform.localPosition = new Vector3(0, 0, 1); // Adjust based on weapon model
-            bulletSpawnPoint = spawnPointObj.transform;
+            bulletSpawnPoint = FindChildInObject(weapon, "barrel")?.transform;
+            weapon_rh_pos = FindChildInObject(weapon, "RHgrabpos");
+            weapon_lh_pos = FindChildInObject(weapon, "LHgrabpos");
         }
-        
+
+        right_hand = FindChildInObject(gameObject, "RightHandGrab");
+        left_hand = FindChildInObject(gameObject, "LeftHandGrab");
+
+        Debug.Log("Initialization results: " +
+                 "weapon=" + (weapon != null) + ", " +
+                 "bulletSpawnPoint=" + (bulletSpawnPoint != null) + ", " +
+                 "right_hand=" + (right_hand != null) + ", " +
+                 "left_hand=" + (left_hand != null) + ", " +
+                 "weapon_rh_pos=" + (weapon_rh_pos != null) + ", " +
+                 "weapon_lh_pos=" + (weapon_lh_pos != null));
+
         Cursor.lockState = CursorLockMode.Locked;
     }
+
+    GameObject FindChildInObject(GameObject parent, string name)
+    {
+        if (parent == null) return null;
+
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == name)
+                return child.gameObject;
+        }
+        return null;
+    }
+
 
     void Update()
     {
@@ -70,7 +100,7 @@ public class PlayerController : MonoBehaviour
         }
         player_look.origin = cam.transform.position;
         player_look.direction = cam.transform.forward;
-        AdjustWeaponDirection();
+        AdjustWeaponPosition();
         
         // Shoot with rate limiting
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
@@ -292,30 +322,50 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    void AdjustWeaponDirection() 
+    void AdjustWeaponPosition()
     {
-        if (weapon != null)
+        if (weapon != null && right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
         {
-            Quaternion weapon_rotation;
-            switch (weapon.name)
-            {
-                case "w_test":
-                    weapon_rotation = cam.transform.rotation * Quaternion.Euler(90f, 0, 0);
-                    weapon.transform.rotation = weapon_rotation;
-                    break;
-                case "w_ak":
-                    weapon_rotation = cam.transform.rotation * Quaternion.Euler(0, 0, 90f);
-                    weapon.transform.rotation = weapon_rotation;
-                    // Adjust for AK-47
-                    break;
-                case "w_m4":
-                    // Adjust for M4
-                    break;
-                default:
-                    weapon.transform.rotation = cam.transform.rotation;
-                    Debug.LogWarning("Unknown weapon type: " + weapon.name);
-                    break;
-            }
+            // First, calculate the position to move the weapon to (based on right hand)
+            Vector3 positionOffset = right_hand.transform.position - weapon_rh_pos.transform.position;
+
+            // Then calculate the rotation
+            // Get vectors representing the directions between hands and grab points
+            Vector3 targetHandsDirection = (left_hand.transform.position - right_hand.transform.position).normalized;
+            Vector3 weaponGrabsDirection = (weapon_lh_pos.transform.position - weapon_rh_pos.transform.position).normalized;
+
+            // Calculate rotation to align these directions
+            Quaternion alignRotation = Quaternion.FromToRotation(weaponGrabsDirection, targetHandsDirection);
+
+            // Apply position and rotation to the weapon
+            weapon.transform.position += positionOffset;
+            weapon.transform.rotation = alignRotation * weapon.transform.rotation;
+
+            // Add debug logging
+        }
+        else
+        {
+            // Add detailed debug output for what's missing
+            Debug.LogWarning("Weapon adjustment failed because: " + 
+                             (weapon == null ? "weapon is null; " : "") +
+                             (right_hand == null ? "right_hand is null; " : "") +
+                             (left_hand == null ? "left_hand is null; " : "") +
+                             (weapon_rh_pos == null ? "weapon_rh_pos is null; " : "") +
+                             (weapon_lh_pos == null ? "weapon_lh_pos is null; " : ""));
         }
     }
+    void OnDrawGizmos()
+{
+    if (right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(right_hand.transform.position, left_hand.transform.position);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(weapon_rh_pos.transform.position, weapon_lh_pos.transform.position);
+    }
+}
+
+
+
 }
