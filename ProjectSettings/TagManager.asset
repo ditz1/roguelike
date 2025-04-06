@@ -10,7 +10,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - FirstPersonOnly
   - Water
   - UI
   - MaskToPlayer

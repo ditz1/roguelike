@@ -9,6 +9,9 @@ public class PlayerAnimator : MonoBehaviour
     void Start()
     {
 
+        GameObject model = FindChildInObject(gameObject, "model");
+        player_prefab = FindChildInObject(model, "playerfullsplit"); // eventually this will be character selected by player
+
         rb = GetComponent<Rigidbody>();
         if (rb == null)
         {
@@ -16,7 +19,7 @@ public class PlayerAnimator : MonoBehaviour
             return;
         }
 
-        player_prefab = GameObject.Find("playerfullsplit");
+        //player_prefab = GameObject.Find("playerfullsplit");
         if (player_prefab == null)
         {
             Debug.LogError("Player prefab not found. Make sure it is named 'Playerfull' and is a child of this object.");
@@ -37,6 +40,18 @@ public class PlayerAnimator : MonoBehaviour
             return;
         }
 
+    }
+
+    GameObject FindChildInObject(GameObject parent, string name)
+    {
+        if (parent == null) return null;
+
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+        {
+            if (child.name == name)
+                return child.gameObject;
+        }
+        return null;
     }
 
     void Update()

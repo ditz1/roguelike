@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
     GameObject weapon;
+    GameObject external_view_weapon;
     Ray player_look;
     RaycastHit contact;
     Camera cam;
@@ -36,6 +37,8 @@ public class PlayerController : MonoBehaviour
     GameObject left_hand;
     GameObject weapon_rh_pos;
     GameObject weapon_lh_pos;
+    GameObject first_person_rh;
+    GameObject first_person_lh;
     
     void Start()
     {
@@ -44,7 +47,23 @@ public class PlayerController : MonoBehaviour
         {
             Display.displays[1].Activate();
         }
-        weapon = FindWeapon();
+        weapon = FindWeapon(); // this finds weapon for first person view
+        // make a copy of weapon for external view
+        external_view_weapon = Instantiate(weapon, new Vector3(0, 0, 0), weapon.transform.rotation);
+        external_view_weapon.transform.parent = GameObject.Find("model").transform;
+        MaskObjectToLayer(external_view_weapon, "MaskToPlayer");
+        MaskObjectToLayer(weapon, "FirstPersonOnly");
+
+        GameObject weapon_container = weapon.transform.parent.gameObject;
+        if (weapon_container != null)
+        {
+            first_person_lh = FindChildInObject(weapon_container, "playerhand_l");
+            first_person_rh = FindChildInObject(weapon_container, "playerhand_r");
+        }
+        // adjust weapon params based on weapon prefab
+
+        //external_view_weapon.localScale = new Vector3(1, 1, 1);
+
         rb = GetComponent<Rigidbody>();
         cam = Camera.main;
         player_look = new Ray(cam.transform.position, cam.transform.forward);
@@ -52,8 +71,8 @@ public class PlayerController : MonoBehaviour
         if (weapon != null)
         {
             bulletSpawnPoint = FindChildInObject(weapon, "barrel")?.transform;
-            weapon_rh_pos = FindChildInObject(weapon, "RHgrabpos");
-            weapon_lh_pos = FindChildInObject(weapon, "LHgrabpos");
+            weapon_rh_pos = FindChildInObject(external_view_weapon, "RHgrabpos");
+            weapon_lh_pos = FindChildInObject(external_view_weapon, "LHgrabpos");
         }
 
         right_hand = FindChildInObject(gameObject, "RightHandGrab");
@@ -79,7 +98,19 @@ public class PlayerController : MonoBehaviour
             if (child.name == name)
                 return child.gameObject;
         }
+        Debug.LogWarning("Child object with name " + name + " not found in " + parent.name);
         return null;
+    }
+
+    void MaskObjectToLayer(GameObject obj, string layerName)
+    {
+        if (obj == null) return;
+
+        obj.layer = LayerMask.NameToLayer(layerName);
+        foreach (Transform child in obj.transform)
+        {
+            MaskObjectToLayer(child.gameObject, layerName);
+        }
     }
 
 
@@ -101,6 +132,11 @@ public class PlayerController : MonoBehaviour
         player_look.origin = cam.transform.position;
         player_look.direction = cam.transform.forward;
         AdjustWeaponPosition();
+        // only adjust if camera X rotation is > -15 degrees and < 30
+        if (NormalizeAngle(cam.transform.localEulerAngles.x) > -15 && NormalizeAngle(cam.transform.localEulerAngles.x) < 30)
+        {
+             AdjustFirstPersonHandsPosition(); // adjust weapon position for first person view
+        }
         
         // Shoot with rate limiting
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
@@ -235,6 +271,8 @@ public class PlayerController : MonoBehaviour
         
     }
 
+
+
     void FireBullet()
     {
         
@@ -308,13 +346,18 @@ public class PlayerController : MonoBehaviour
 
     GameObject FindWeapon()
     {
-        // Code unchanged
+        // should be attached to camera
         foreach (Transform child in transform)
         {
-            if (child.name.StartsWith("w_"))
+            if (child.name == "Main Camera" && child.GetChild(0).name.Contains("weapon"))
             {
-                Debug.Log("Found weapon: " + child.name);
-                return child.gameObject;
+                GameObject weapon_container = child.GetChild(0).gameObject;
+
+                if (weapon_container.transform.childCount > 0)
+                {
+                    Debug.Log("Found weapon: " + weapon_container.transform.GetChild(0).name);
+                    return weapon_container.transform.GetChild(0).gameObject;
+                }
             }
         }
 
@@ -322,9 +365,28 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
+    void AdjustWeaponParams(GameObject weapon)
+    {
+        string weaponName = weapon.name.ToLower();
+        weaponName.Replace("w_", "");
+        
+        if (weapon != null)
+        {
+            if (weaponName.Contains("ak")){
+                weapon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+                weapon.transform.rotation = Quaternion.Euler(0, 0, 90f);
+            }    
+
+        }
+        else
+        {
+            Debug.LogWarning("Weapon is null, cannot adjust parameters.");
+        }
+    }
+
     void AdjustWeaponPosition()
     {
-        if (weapon != null && right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
+        if (external_view_weapon != null && right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
         {
             // First, calculate the position to move the weapon to (based on right hand)
             Vector3 positionOffset = right_hand.transform.position - weapon_rh_pos.transform.position;
@@ -338,8 +400,8 @@ public class PlayerController : MonoBehaviour
             Quaternion alignRotation = Quaternion.FromToRotation(weaponGrabsDirection, targetHandsDirection);
 
             // Apply position and rotation to the weapon
-            weapon.transform.position += positionOffset;
-            weapon.transform.rotation = alignRotation * weapon.transform.rotation;
+            external_view_weapon.transform.position += positionOffset;
+            external_view_weapon.transform.rotation = alignRotation * external_view_weapon.transform.rotation;
 
             // Add debug logging
         }
@@ -347,25 +409,104 @@ public class PlayerController : MonoBehaviour
         {
             // Add detailed debug output for what's missing
             Debug.LogWarning("Weapon adjustment failed because: " + 
-                             (weapon == null ? "weapon is null; " : "") +
+                             (external_view_weapon == null ? "weapon is null; " : "") +
                              (right_hand == null ? "right_hand is null; " : "") +
                              (left_hand == null ? "left_hand is null; " : "") +
                              (weapon_rh_pos == null ? "weapon_rh_pos is null; " : "") +
                              (weapon_lh_pos == null ? "weapon_lh_pos is null; " : ""));
         }
     }
-    void OnDrawGizmos()
-{
-    if (right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
+
+    void AdjustFirstPersonHandsPosition()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(right_hand.transform.position, left_hand.transform.position);
+        if (weapon != null && first_person_lh != null && first_person_rh != null)
+        {
+            // Find grab positions on the weapon
+            GameObject leftGrabPos = FindChildInObject(weapon, "LHgrabpos");
+            GameObject rightGrabPos = FindChildInObject(weapon, "RHgrabpos");
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(weapon_rh_pos.transform.position, weapon_lh_pos.transform.position);
+            if (leftGrabPos == null || rightGrabPos == null)
+            {
+                Debug.LogWarning("Could not find grab positions on weapon");
+                return;
+            }
+
+            // Find hand and arm transforms
+            GameObject leftHand = FindChildInObject(first_person_lh, "hand");
+            GameObject leftArm = FindChildInObject(first_person_lh, "arm");
+            GameObject rightHand = FindChildInObject(first_person_rh, "hand");
+            GameObject rightArm = FindChildInObject(first_person_rh, "arm");
+
+            if (leftHand == null || leftArm == null || rightHand == null || rightArm == null)
+            {
+                Debug.LogWarning("Could not find hand/arm children objects");
+                return;
+            }
+
+            // Get player center position
+            Vector3 playerCenter = cam.transform.position + Vector3.down * 0.5f;
+            // move playercenter a bit behind player
+            playerCenter -= transform.forward * 0.2f;
+            // and move player center a bit right
+            //playerCenter += transform.right * 0.2f;
+            Vector3 playerCenterLeft = playerCenter - transform.right * 0.3f;
+            Vector3 playerCenterRight = playerCenter + transform.right * 0.2f;
+
+            // Following the same approach as AdjustWeaponPosition:
+
+            // 1. Calculate position offsets (position hands at grab positions)
+            Vector3 leftPositionOffset = leftGrabPos.transform.position - leftHand.transform.position;
+            Vector3 rightPositionOffset = rightGrabPos.transform.position - rightHand.transform.position;
+
+            // 2. Calculate rotation alignments
+            // Get vectors representing the directions between parts
+            Vector3 playerToLeftGrab = (leftGrabPos.transform.position - playerCenterLeft).normalized;
+            Vector3 playerToRightGrab = (rightGrabPos.transform.position - playerCenterRight).normalized;
+
+            Vector3 armToHand = (leftHand.transform.position - leftArm.transform.position).normalized;
+            Vector3 armToHandRight = (rightHand.transform.position - rightArm.transform.position).normalized;
+
+            // Calculate rotation to align these directions
+            Quaternion leftAlignRotation = Quaternion.FromToRotation(armToHand, playerToLeftGrab);
+            Quaternion rightAlignRotation = Quaternion.FromToRotation(armToHandRight, playerToRightGrab);
+
+            // 3. Apply position and rotation to the hand objects
+            first_person_lh.transform.position += leftPositionOffset;
+            first_person_rh.transform.position += rightPositionOffset;
+
+            first_person_lh.transform.rotation = leftAlignRotation * first_person_lh.transform.rotation;
+            first_person_rh.transform.rotation = rightAlignRotation * first_person_rh.transform.rotation;
+
+            // Draw debug lines to verify alignment
+            Debug.DrawLine(playerCenterLeft, leftGrabPos.transform.position, Color.magenta);
+            Debug.DrawLine(playerCenterRight, rightGrabPos.transform.position, Color.yellow);
+            Debug.DrawLine(leftArm.transform.position, leftHand.transform.position, Color.blue);
+            Debug.DrawLine(rightArm.transform.position, rightHand.transform.position, Color.red);
+        }
+        else
+        {
+            Debug.LogWarning("First person weapon positioning failed because: " + 
+                            (weapon == null ? "weapon is null; " : "") +
+                            (first_person_lh == null ? "first_person_lh is null; " : "") +
+                            (first_person_rh == null ? "first_person_rh is null; " : ""));
+        }
     }
-}
 
+    float NormalizeAngle(float angle) {
+        while (angle > 180) angle -= 360;
+        while (angle < -180) angle += 360;
+        return angle;
+    }
 
+    void OnDrawGizmos()
+    {
+        if (right_hand != null && left_hand != null && weapon_rh_pos != null && weapon_lh_pos != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawLine(right_hand.transform.position, left_hand.transform.position);
 
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(weapon_rh_pos.transform.position, weapon_lh_pos.transform.position);
+        }
+    }
 }
