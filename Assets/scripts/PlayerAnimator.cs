@@ -16,7 +16,7 @@ public class PlayerAnimator : MonoBehaviour
             return;
         }
 
-        player_prefab = GameObject.Find("Playerfull");
+        player_prefab = GameObject.Find("playerfullsplit");
         if (player_prefab == null)
         {
             Debug.LogError("Player prefab not found. Make sure it is named 'Playerfull' and is a child of this object.");
