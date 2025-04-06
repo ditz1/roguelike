@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -11,21 +12,23 @@ public class PlayerController : MonoBehaviour
     Camera cam;
     public GameObject bullet;
    
-    float maxPlatformHeight = 0.65f;  
+    float maxPlatformHeight = 0.25f;  
     //float platformCheckDistance = 2.6f;  
-    public float climbSpeed = 10.0f; 
+    float climbSpeed = 30.0f; 
 
     private bool isClimbing = false;
     private Vector3 climbTargetPosition;
     
     // Bullet settings
-    public float bulletSpeed = 400f;
+    public float bulletSpeed = 700f;
     public Transform bulletSpawnPoint;
     public float fireRate = 0.1f;
     private float nextFireTime = 0f;
     
     public float mouseSensitivity = 2.0f;
     private float xRotation = 0f;
+
+    bool isReloading = false;
 
     //float p_max_velocity = 18.0f;
     float p_move_speed = 8.5f;
@@ -39,6 +42,31 @@ public class PlayerController : MonoBehaviour
     GameObject weapon_lh_pos;
     GameObject first_person_rh;
     GameObject first_person_lh;
+
+    public enum PlayerMoveState
+    {
+        IDLE,
+        RUN_FORWARD,
+        RUN_BACKWARD,
+        RUN_LEFT,
+        RUN_RIGHT,
+        JUMP,
+    }
+
+    public PlayerMoveState playerMoveState = PlayerMoveState.IDLE;
+
+    private GameObject weaponMagazine;
+    private Vector3 magazineOriginalPosition;
+    private Quaternion magazineOriginalRotation;
+    private float reloadTime = 0.5f; // Time in seconds for reload animation
+    private float reloadTimer = 0f;
+    private enum ReloadState { 
+        NONE, 
+        GRAB_MAG, 
+        WAIT, 
+        RETURN_MAG 
+    }
+    private ReloadState currentReloadState = ReloadState.NONE;
     
     void Start()
     {
@@ -49,6 +77,8 @@ public class PlayerController : MonoBehaviour
         }
         weapon = FindWeapon(); // this finds weapon for first person view
         // make a copy of weapon for external view
+        AssignDefaultViewmodel(); // assign initial offset inside weapon container for different weapons
+
         external_view_weapon = Instantiate(weapon, new Vector3(0, 0, 0), weapon.transform.rotation);
         external_view_weapon.transform.parent = GameObject.Find("model").transform;
         MaskObjectToLayer(external_view_weapon, "MaskToPlayer");
@@ -68,15 +98,29 @@ public class PlayerController : MonoBehaviour
         cam = Camera.main;
         player_look = new Ray(cam.transform.position, cam.transform.forward);
 
+        
+
         if (weapon != null)
         {
             bulletSpawnPoint = FindChildInObject(weapon, "barrel")?.transform;
             weapon_rh_pos = FindChildInObject(external_view_weapon, "RHgrabpos");
             weapon_lh_pos = FindChildInObject(external_view_weapon, "LHgrabpos");
+
+            weaponMagazine = FindChildInObject(weapon, "mag");
+            if (weaponMagazine != null)
+            {
+                magazineOriginalPosition = weaponMagazine.transform.localPosition;
+                magazineOriginalRotation = weaponMagazine.transform.localRotation;
+            }
+            else
+            {
+                Debug.LogWarning("Weapon magazine not found!");
+            }
         }
 
         right_hand = FindChildInObject(gameObject, "RightHandGrab");
         left_hand = FindChildInObject(gameObject, "LeftHandGrab");
+        
 
         Debug.Log("Initialization results: " +
                  "weapon=" + (weapon != null) + ", " +
@@ -113,6 +157,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void AssignDefaultViewmodel()
+    {
+        // MUST BE LOCAL POSITION
+        // assign initial offset inside weapon container for different weapons
+        Debug.Log("weapon name: " + weapon.name);
+        if (weapon.name.Contains("ak")){
+            weapon.transform.localPosition = new Vector3(0.021f, -0.04f, 0.0f);
+        } else if (weapon.name.Contains("m4a1")){
+            weapon.transform.localPosition = new Vector3(0.08f, 0f, -0.06f);
+        }
+    }
+
 
     void Update()
     {
@@ -132,17 +188,32 @@ public class PlayerController : MonoBehaviour
         player_look.origin = cam.transform.position;
         player_look.direction = cam.transform.forward;
         AdjustWeaponPosition();
+        WeaponSway(); // sway weapon based on player movement
         // only adjust if camera X rotation is > -15 degrees and < 30
         if (NormalizeAngle(cam.transform.localEulerAngles.x) > -15 && NormalizeAngle(cam.transform.localEulerAngles.x) < 30)
         {
-             AdjustFirstPersonHandsPosition(); // adjust weapon position for first person view
+             if (!isReloading){
+                AdjustFirstPersonHandsPosition(); // adjust weapon position for first person view
+             }
         }
         
         // Shoot with rate limiting
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
         {
-            nextFireTime = Time.time + fireRate; // Set next allowed fire time
-            FireBullet();
+            if (!isReloading){
+                nextFireTime = Time.time + fireRate; // Set next allowed fire time
+                FireBullet();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && !isReloading)
+        {
+            isReloading = true;
+        }
+
+        if (isReloading)
+        {
+            ReloadWeapon();
         }
 
         Debug.DrawRay(player_look.origin, player_look.direction * 100, Color.red);
@@ -164,13 +235,28 @@ public class PlayerController : MonoBehaviour
     {
         float jump_force = 10.0f;
 
-        // --- Horizontal movement ---
         Vector3 inputDir = Vector3.zero;
 
-        if (Input.GetKey(KeyCode.W)) inputDir += transform.forward;
-        if (Input.GetKey(KeyCode.S)) inputDir -= transform.forward;
-        if (Input.GetKey(KeyCode.A)) inputDir -= transform.right;
-        if (Input.GetKey(KeyCode.D)) inputDir += transform.right;
+        if (Input.GetKey(KeyCode.W)) {
+            playerMoveState = PlayerMoveState.RUN_FORWARD;
+            inputDir += transform.forward;
+        }
+        
+        if (Input.GetKey(KeyCode.S)) {
+            playerMoveState = PlayerMoveState.RUN_BACKWARD;
+            inputDir -= transform.forward;
+        }
+        
+        if (Input.GetKey(KeyCode.A)){ 
+            playerMoveState = PlayerMoveState.RUN_LEFT;
+            // just set z rotation directly
+            inputDir -= transform.right;
+        }
+        
+        if (Input.GetKey(KeyCode.D)){ 
+            playerMoveState = PlayerMoveState.RUN_RIGHT;
+            inputDir += transform.right; 
+        }
 
         Vector3 velocity = rb.linearVelocity;
 
@@ -186,6 +272,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            playerMoveState = PlayerMoveState.IDLE;
             // Apply friction when no input, preserve Y
             velocity.x = Mathf.Lerp(velocity.x, 0, Time.deltaTime * 5f);
             velocity.z = Mathf.Lerp(velocity.z, 0, Time.deltaTime * 5f);
@@ -203,11 +290,11 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = velocity;
 
         // Platform climbing logic
-        if (!isClimbing)
+        if (!isClimbing && isGrounded)
         {
             CheckForPlatform();
         }
-        if (isClimbing)
+        if (isClimbing && isGrounded)
         {
             ClimbPlatform();
         }
@@ -234,21 +321,22 @@ public class PlayerController : MonoBehaviour
 
         // Position in front of player
         Vector3 forwardPos = transform.position + moveDir * 1.0f;
-        forwardPos.y -= 0.3f; // some offset;
+        forwardPos.y += playerHeight / 2; // Adjust height to player's center
 
         // Simple raycast down from that position
         RaycastHit hit;
-        if (Physics.Raycast(forwardPos, Vector3.down, out hit, 0.5f))
+        if (Physics.Raycast(forwardPos, Vector3.down, out hit, 0.7f))
         {
+            float distance_to_target = Vector3.Distance(forwardPos, hit.point);
             // If we hit something, climb it
             climbTargetPosition = new Vector3(
                 forwardPos.x, 
-                hit.point.y + playerHeight/2,
+                hit.point.y + 0.6f, // just a flat offset
                 forwardPos.z
             );
-            float distance_to_target = Vector3.Distance(forwardPos, hit.point);
             Debug.Log("Distance to target: " + distance_to_target);
-            if (distance_to_target < maxPlatformHeight)
+            // shorter distance to target means higher platform
+            if (distance_to_target > maxPlatformHeight)
             {
                 // Move player up to the platform's height
                 transform.position = Vector3.MoveTowards(transform.position, climbTargetPosition, Time.deltaTime * climbSpeed);
@@ -271,10 +359,145 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    void WeaponRecoil()
+    {
+        float recoilAmount = 0.5f; // defaults 
+        float recoilSpeed = 12f; 
+        
+        // heavier firing should have high recoil_amt, lower recoil_speed
+        // lighter firing should have low recoil_amt, higher recoil_speed
+
+        if (weapon.name.Contains("ak")){
+            recoilAmount = 0.7f;
+            recoilSpeed = 8f;
+        } else if (weapon.name.Contains("m4a1")){
+            recoilAmount = 0.3f;
+            recoilSpeed = 15f;
+        }
+
+        weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -1f * recoilAmount), Time.deltaTime * recoilSpeed);
+    }
+
+    void ReloadWeapon()
+    {
+        if (weaponMagazine == null)
+        {
+            isReloading = false;
+            Debug.LogWarning("Cannot reload: magazine not found");
+            return;
+        }
+
+        // Find the grab position on the magazine
+        GameObject magazineGrabPos = FindChildInObject(weaponMagazine, "grab");
+        if (magazineGrabPos == null)
+        {
+            isReloading = false;
+            Debug.LogWarning("Cannot reload: magazine grab position not found");
+            return;
+        }
+
+        // Simple state machine for reload animation
+        Debug.Log("Reloading weapon... Current state: " + currentReloadState);
+        switch (currentReloadState)
+        {
+            case ReloadState.NONE:
+                // Start the reload sequence
+                GameObject weapon_container = weapon.transform.parent.gameObject;
+                if (weapon_container != null)
+                {                    
+                    weapon_container.transform.Rotate(0, 0, -15);
+                }
+                currentReloadState = ReloadState.GRAB_MAG;
+                break;
+
+            case ReloadState.GRAB_MAG:
+                // Move left hand to magazine grab position
+                if (first_person_lh != null)
+                {
+                    // Position the hand at the magazine grab position
+                    GameObject leftHand = FindChildInObject(first_person_lh, "hand");
+                    if (leftHand != null)
+                    {
+                        // Calculate position offset for hand
+                        Vector3 handOffset = magazineGrabPos.transform.position - leftHand.transform.position;
+                        first_person_lh.transform.position += handOffset * Time.deltaTime * 10f;
+
+                        // If hand is close enough to grab position
+                        if (Vector3.Distance(leftHand.transform.position, magazineGrabPos.transform.position) < 0.05f)
+                        {                            
+                            // Move to next state
+                            currentReloadState = ReloadState.WAIT;
+                            reloadTimer = 0f;
+                        }
+                    }
+                }
+                break;
+
+            case ReloadState.WAIT:
+                // Wait for specified time
+                // during wait, move hand even further down and magazine down
+                reloadTimer += Time.deltaTime;
+                if (reloadTimer >= reloadTime)
+                {
+                    currentReloadState = ReloadState.RETURN_MAG;
+                } else {
+                    Vector3 magMovePos = weaponMagazine.transform.localPosition;
+                    magMovePos.z += 0.5f;
+                    weaponMagazine.transform.localPosition = Vector3.Lerp(
+                        weaponMagazine.transform.localPosition,
+                        magMovePos,
+                        Time.deltaTime * 10f
+                    );
+                    // have the hand follow the magazine
+                    Vector3 handMovePos = first_person_lh.transform.localPosition;
+                    handMovePos.y -= 0.1f;
+                    first_person_lh.transform.localPosition = Vector3.Lerp(
+                        first_person_lh.transform.localPosition,
+                        handMovePos,
+                        Time.deltaTime * 10f
+                    );
+                }
+                break;
+
+            case ReloadState.RETURN_MAG:
+                // Return magazine to original position
+                weaponMagazine.transform.localPosition = Vector3.Lerp(
+                    weaponMagazine.transform.localPosition,
+                    magazineOriginalPosition,
+                    Time.deltaTime * 10f
+                );
+
+                Vector3 handMovePos1 = first_person_lh.transform.localPosition;
+                handMovePos1.y += 0.2f;
+                first_person_lh.transform.localPosition = Vector3.Lerp(
+                    first_person_lh.transform.localPosition,
+                    handMovePos1,
+                    Time.deltaTime * 10f
+                );
+
+                // If magazine is close enough to original position
+                if (Vector3.Distance(weaponMagazine.transform.localPosition, magazineOriginalPosition) < 0.1f)
+                {
+                    // Reset everything
+                    weaponMagazine.transform.localPosition = magazineOriginalPosition;
+                    weaponMagazine.transform.localRotation = magazineOriginalRotation;
+                    currentReloadState = ReloadState.NONE;
+                    GameObject weapon_container0 = weapon.transform.parent.gameObject;
+                    if (weapon_container0 != null)
+                    {
+                        // rotate by 10 degrees on z axis
+                        weapon_container0.transform.Rotate(0, 0, 15);
+                    }
+                    isReloading = false;
+                }
+                break;
+        }
+    }
 
 
     void FireBullet()
     {
+        WeaponRecoil();
         
         if (bullet != null)
         {
@@ -326,15 +549,16 @@ public class PlayerController : MonoBehaviour
             {
                 bulletRb = newBullet.AddComponent<Rigidbody>();
             }
+            newBullet.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
             // Configure bullet physics
             bulletRb.constraints = RigidbodyConstraints.FreezeRotation;
-            bulletRb.mass = 100.0f;
+            bulletRb.mass = 1.0f;
             bulletRb.useGravity = false;
-            bulletRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            // turn off collisions for bullets
 
             // Apply velocity in direction of hit point
-            bulletRb.linearVelocity = directionToTarget.normalized * bulletSpeed;
+            bulletRb.linearVelocity = directionToTarget.normalized  * bulletSpeed;
 
             Destroy(newBullet, 1f);
         }
@@ -355,8 +579,14 @@ public class PlayerController : MonoBehaviour
 
                 if (weapon_container.transform.childCount > 0)
                 {
-                    Debug.Log("Found weapon: " + weapon_container.transform.GetChild(0).name);
-                    return weapon_container.transform.GetChild(0).gameObject;
+                    for (int i = 0; i < weapon_container.transform.childCount; i++)
+                    {
+                        if (weapon_container.transform.GetChild(i).name.StartsWith("w_"))
+                        {
+                            Debug.Log("Found weapon: " + weapon_container.transform.GetChild(i).name);
+                            return weapon_container.transform.GetChild(i).gameObject;
+                        }
+                    }
                 }
             }
         }
@@ -365,24 +595,6 @@ public class PlayerController : MonoBehaviour
         return null;
     }
 
-    void AdjustWeaponParams(GameObject weapon)
-    {
-        string weaponName = weapon.name.ToLower();
-        weaponName.Replace("w_", "");
-        
-        if (weapon != null)
-        {
-            if (weaponName.Contains("ak")){
-                weapon.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-                weapon.transform.rotation = Quaternion.Euler(0, 0, 90f);
-            }    
-
-        }
-        else
-        {
-            Debug.LogWarning("Weapon is null, cannot adjust parameters.");
-        }
-    }
 
     void AdjustWeaponPosition()
     {
@@ -415,6 +627,24 @@ public class PlayerController : MonoBehaviour
                              (weapon_rh_pos == null ? "weapon_rh_pos is null; " : "") +
                              (weapon_lh_pos == null ? "weapon_lh_pos is null; " : ""));
         }
+    }
+
+    void WeaponSway()
+    {
+        if (playerMoveState == PlayerMoveState.RUN_LEFT){
+            // lerp weapon to the left
+            weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0.03f, 0, 0), Time.deltaTime * 5f);
+        } else if (playerMoveState == PlayerMoveState.RUN_RIGHT){
+            // lerp weapon to the right
+            weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(-0.03f, 0, 0), Time.deltaTime * 5f);
+        } else if (playerMoveState == PlayerMoveState.RUN_FORWARD){
+            // lerp weapon to the front
+            weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -0.03f), Time.deltaTime * 5f);
+        } else {
+            // lerp weapon to the center
+            weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5f);
+        }
+
     }
 
     void AdjustFirstPersonHandsPosition()
