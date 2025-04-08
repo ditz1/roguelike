@@ -166,6 +166,8 @@ public class PlayerController : MonoBehaviour
             weapon.transform.localPosition = new Vector3(0.021f, -0.04f, 0.0f);
         } else if (weapon.name.Contains("m4a1")){
             weapon.transform.localPosition = new Vector3(0.08f, 0f, -0.06f);
+        } else if (weapon.name.Contains("vector")){
+            weapon.transform.localPosition = new Vector3(-0.04f, 0.0f, -0.8f);
         }
     }
 
@@ -373,6 +375,9 @@ public class PlayerController : MonoBehaviour
         } else if (weapon.name.Contains("m4a1")){
             recoilAmount = 0.3f;
             recoilSpeed = 15f;
+        } else if (weapon.name.Contains("vector")){
+            recoilAmount = 0.2f;
+            recoilSpeed = 20f;
         }
 
         weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -1f * recoilAmount), Time.deltaTime * recoilSpeed);
