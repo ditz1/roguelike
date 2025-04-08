@@ -35,6 +35,11 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        if (player == null)
+        {
+            // Try to find the player object again if it's null
+            player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
+        }
         UpdateEnemy(); // Call the enemy update method
         UpdateHealthBar();
         UpdateEnemyRotation(); // Call the rotation update method

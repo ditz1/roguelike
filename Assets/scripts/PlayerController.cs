@@ -1,8 +1,9 @@
 using System;
 using Unity.VisualScripting;
 using UnityEngine;
+using Unity.Netcode;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     Rigidbody rb;
     GameObject weapon;
@@ -78,11 +79,12 @@ public class PlayerController : MonoBehaviour
     
     void Start()
     {
+                
         // this is just needed for debugging
-        if (Display.displays.Length > 1)
-        {
-            Display.displays[1].Activate();
-        }
+        //if (Display.displays.Length > 1)
+        //{
+        //    Display.displays[1].Activate();
+        //}
         
         // adjust weapon params based on weapon prefab
         // try to find a weapon if player already has one
@@ -101,10 +103,72 @@ public class PlayerController : MonoBehaviour
         //external_view_weapon.localScale = new Vector3(1, 1, 1);
 
         rb = GetComponent<Rigidbody>();
-        cam = Camera.main;
+        cam = GetComponentInChildren<Camera>();
         player_look = new Ray(cam.transform.position, cam.transform.forward);
 
         Cursor.lockState = CursorLockMode.Locked;
+        if (!IsOwner){
+            cam.enabled = false;
+        }
+    }
+
+
+    // this is basically start method
+    public override void OnNetworkSpawn()
+    {
+        rb = GetComponent<Rigidbody>();
+        cam = GetComponentInChildren<Camera>();
+        player_look = new Ray(cam.transform.position, cam.transform.forward);
+        Cursor.lockState = CursorLockMode.Locked;
+
+        // Find your model GameObject
+        GameObject playerModel = null;
+        foreach (Transform child in transform) {
+            if (child.name == "model") {
+                playerModel = child.gameObject;
+                break;
+            }
+        }
+
+        foreach(Transform child in transform) {
+            if (child.name == "Main Camera") {
+                foreach (Transform nested_child in child){
+                    if (nested_child.name == "weapon") {
+                        weapon = nested_child.gameObject;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (playerModel == null) {
+            Debug.LogError("Player model not found! Make sure your player has a child named 'model'");
+        }
+        else {
+            // Apply different layers based on ownership
+            if (IsOwner) {
+                Debug.Log("This is local player - masking model to MaskToPlayer layer");
+                MaskObjectToLayer(playerModel, "MaskToPlayer");
+            } else {
+                Debug.Log("This is remote player - keeping model on Default layer");
+                MaskObjectToLayer(playerModel, "Default");
+                MaskObjectToLayer(weapon, "Ignore");
+            }
+        }
+
+        // Load weapon after applying layers
+        if (!IsOwner) {
+            cam.enabled = false;
+            LoadWeapon();
+        } else {
+            weapon = FindWeapon();
+            if (weapon != null) {
+                LoadWeapon();
+            } else {
+                FindWeapon();
+                AssignDefaultViewmodel();
+            }
+        }
     }
 
     GameObject FindChildInObject(GameObject parent, string name)
@@ -122,9 +186,23 @@ public class PlayerController : MonoBehaviour
 
     void MaskObjectToLayer(GameObject obj, string layerName)
     {
-        if (obj == null) return;
+        if (obj == null) 
+        {
+            Debug.LogWarning("Object is null, cannot mask to layer " + layerName);
+            return;
+        }
 
-        obj.layer = LayerMask.NameToLayer(layerName);
+        // Check if the layer exists
+        int layerIndex = LayerMask.NameToLayer(layerName);
+        if (layerIndex == -1)
+        {
+            Debug.LogError("Layer '" + layerName + "' does not exist! Did you add it in Project Settings?");
+            return;
+        }
+
+        Debug.Log("Masking object " + obj.name + " to layer " + layerName + " (index: " + layerIndex + ")");
+        obj.layer = layerIndex;
+
         foreach (Transform child in obj.transform)
         {
             MaskObjectToLayer(child.gameObject, layerName);
@@ -155,6 +233,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!IsOwner) {
+
+            return;
+        }
+        
         // Always check for ground
         RaycastHit hit;
         isGrounded = Physics.Raycast(rb.transform.position, Vector3.down, out hit, 1.1f);
@@ -388,20 +471,41 @@ public class PlayerController : MonoBehaviour
 
     void LoadWeapon(){
         AssignDefaultViewmodel(); // assign initial offset inside weapon container for different weapons
-        MaskObjectToLayer(GameObject.Find("model"), "MaskToPlayer");
+        GameObject localModel = null;
+        foreach (Transform child in transform) {
+            if (child.name == "model") {
+                localModel = child.gameObject;
+                break;
+            }
+        }
+        
 
+        if (localModel == null) {
+            Debug.LogWarning("Can't cull local model correctly!");
+            return;
+        }
+
+        
+
+        // make a copy of weapon for external view
+        external_view_weapon = Instantiate(weapon, new Vector3(0, 0, 0), weapon.transform.rotation);
+        external_view_weapon.transform.parent = GameObject.Find("model").transform;
+        
+        if (IsOwner){
+            MaskObjectToLayer(localModel, "MaskToPlayer");
+            MaskObjectToLayer(external_view_weapon, "MaskToPlayer");
+            MaskObjectToLayer(weapon, "FirstPersonOnly");
+        } else {
+            MaskObjectToLayer(localModel, "Default");
+            MaskObjectToLayer(external_view_weapon, "Default");
+            MaskObjectToLayer(weapon, "Ignore");
+        }
 
         if (weapon == null) {
             Debug.LogWarning("No weapon found, cannot load weapon.");
             return;
         }
 
-
-        // make a copy of weapon for external view
-        external_view_weapon = Instantiate(weapon, new Vector3(0, 0, 0), weapon.transform.rotation);
-        external_view_weapon.transform.parent = GameObject.Find("model").transform;
-        MaskObjectToLayer(external_view_weapon, "MaskToPlayer");
-        MaskObjectToLayer(weapon, "FirstPersonOnly");
 
         weapon_container = weapon.transform.parent.gameObject;
         if (weapon_container != null)
