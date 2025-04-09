@@ -1,0 +1,305 @@
+Unity Editor version:    6000.0.44f1 (101c91f3a8fb)
+Branch:                  6000.0/release
+Build type:              Release
+Batch mode:              YES
+macOS version:           Version 15.1 (Build 24B83)
+Darwin version:          24.1.0
+Architecture:            arm64
+Running under Rosetta:   NO
+Available memory:        16384 MB
+Using pre-set license
+Pro License: YES
+
+COMMAND LINE ARGUMENTS:
+/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/MacOS/Unity
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker2
+-projectPath
+/Users/daniel/Code/UnityProj/roguelike
+-logFile
+Logs/AssetImportWorker2.log
+-srvPort
+52442
+-job-worker-count
+5
+-background-job-worker-count
+8
+-gc-helper-count
+1
+Successfully changed project path to: /Users/daniel/Code/UnityProj/roguelike
+/Users/daniel/Code/UnityProj/roguelike
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [8316532800]  Target information:
+
+Player connection [8316532800]  * "[IP] 10.56.179.223 [Port] 0 [Flags] 2 [Guid] 3830323578 [EditorId] 3830323578 [Version] 1048832 [Id] OSXEditor(0,Daniels-MacBook-Pro-218.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+
+Player connection [8316532800] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8316532800] Host joined alternative multi-casting on [225.0.0.222:34997]...
+JobSystem: Creating JobQueue using job-worker-count value 5
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 4.55 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.0.44f1 (101c91f3a8fb)
+[Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path /Users/daniel/Code/UnityProj/roguelike/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+ preferred device: Apple M2 Pro (high power)
+Metal devices available: 1
+0: Apple M2 Pro (high power)
+Using device Apple M2 Pro (high power)
+Initializing Metal device caps: Apple M2 Pro
+Initialize mono
+Mono path[0] = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Managed'
+Mono path[1] = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit-macos'
+Mono config path = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56191
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.006645 seconds.
+- Loaded All Assemblies, in  0.311 seconds
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.271 seconds
+Domain Reload Profiling: 582ms
+	BeginReloadAssembly (111ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (0ms)
+	RebuildCommonClasses (26ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (41ms)
+	LoadAllAssembliesAndSetupDomain (123ms)
+		LoadAssemblies (112ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (120ms)
+			TypeCache.Refresh (118ms)
+				TypeCache.ScanAssembly (107ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (1ms)
+	FinalizeReload (271ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (239ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (29ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (41ms)
+			ProcessInitializeOnLoadAttributes (107ms)
+			ProcessInitializeOnLoadMethodAttributes (58ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  0.596 seconds
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.38 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Package Manager log level set to [2]
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.50 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.551 seconds
+Domain Reload Profiling: 1147ms
+	BeginReloadAssembly (97ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (27ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (22ms)
+	LoadAllAssembliesAndSetupDomain (441ms)
+		LoadAssemblies (289ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (198ms)
+			TypeCache.Refresh (156ms)
+				TypeCache.ScanAssembly (132ms)
+			BuildScriptInfoCaches (31ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (551ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (441ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (93ms)
+			ProcessInitializeOnLoadAttributes (276ms)
+			ProcessInitializeOnLoadMethodAttributes (66ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (2ms)
+Launching external process: /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Tools/UnityShaderCompiler
+Launched and connected shader compiler UnityShaderCompiler after 0.03 seconds
+Refreshing native plugins compatible for Editor in 0.70 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 216 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6923 unused Assets / (4.3 MB). Loaded Objects now: 7622.
+Memory consumption went from 168.8 MB to 164.5 MB.
+Total: 6.824041 ms (FindLiveObjects: 0.465167 ms CreateObjectMapping: 0.305708 ms MarkObjects: 4.142083 ms  DeleteObjects: 1.910541 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 77094.341300 seconds.
+  path: Assets/room_platform.prefab
+  artifactKey: Guid(6dbede199bce14781a1d03547a6b140d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/room_platform.prefab using Guid(6dbede199bce14781a1d03547a6b140d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f527b07871190794b90c9479630772fe') in 0.307843083 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 29
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.644621 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Editor/com.rlabrecque.steamworks.net.editor.asmdef
+  artifactKey: Guid(be281b7992e9e1840851a78ba9db107c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Editor/com.rlabrecque.steamworks.net.editor.asmdef using Guid(be281b7992e9e1840851a78ba9db107c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ec893d4c46e2bf3f7164afcccce90bd0') in 0.000318334 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.496363 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/com.rlabrecque.steamworks.net.asmdef
+  artifactKey: Guid(68bd7fdb68ef2684e982e8a9825b18a5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/com.rlabrecque.steamworks.net.asmdef using Guid(68bd7fdb68ef2684e982e8a9825b18a5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '79abc5ecfbb2895b65f760d010be1c04') in 0.000295959 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.364293 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingsockets.cs
+  artifactKey: Guid(b14ddce873fdbfc4aab2f5e4dafc27aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingsockets.cs using Guid(b14ddce873fdbfc4aab2f5e4dafc27aa) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd638844b05e760897aec415af813fe7f') in 0.000542333 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.964871 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingmessages.cs
+  artifactKey: Guid(abf31235e5c3e35459961b3c09239003) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingmessages.cs using Guid(abf31235e5c3e35459961b3c09239003) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '556a4b9766c396bf57314494fcf7688f') in 0.000365834 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.113509 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworking.cs
+  artifactKey: Guid(15b6f39e728f43c4b85c79fd3d6e6ecb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworking.cs using Guid(15b6f39e728f43c4b85c79fd3d6e6ecb) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'f5c72d4cf60f97a762c3d74f947ddc1b') in 0.000196917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 9.982401 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingutils.cs
+  artifactKey: Guid(28bd6c2bd8eef784abca992dc6409c98) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamnetworkingutils.cs using Guid(28bd6c2bd8eef784abca992dc6409c98) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'fde3be7d8b86f3de554ba48bf792d16a') in 0.000341792 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.344923 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverutils.cs
+  artifactKey: Guid(3bc4fe214c0d4e141a8566489f6eba33) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverutils.cs using Guid(3bc4fe214c0d4e141a8566489f6eba33) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'eeaff27a694220a91d5a59e5d6db016a') in 0.000336792 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.347282 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameservernetworkingsockets.cs
+  artifactKey: Guid(175e632ae8fecc24e902fada780c39dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameservernetworkingsockets.cs using Guid(175e632ae8fecc24e902fada780c39dc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b116e6f142e6572702e0f515040a3dfc') in 0.000315917 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.004487 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameservernetworking.cs
+  artifactKey: Guid(eb8e260012cb01949bdbff38c366d4d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameservernetworking.cs using Guid(eb8e260012cb01949bdbff38c366d4d6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5b5a2fc1da55e9c7542ef9c4eef577f5') in 0.000313334 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.747614 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverinventory.cs
+  artifactKey: Guid(10c74c5b7d1df524ab3ad296b9efe267) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverinventory.cs using Guid(10c74c5b7d1df524ab3ad296b9efe267) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a519b3e9da46d473b3037c881822e181') in 0.000291042 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.446705 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserver.cs
+  artifactKey: Guid(8c4257f3ef3cd614f8137738c4a58d8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserver.cs using Guid(8c4257f3ef3cd614f8137738c4a58d8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '15a366ec95dc886be75f4117544fbdff') in 0.000217125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+

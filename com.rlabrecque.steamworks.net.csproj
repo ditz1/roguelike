@@ -154,12 +154,12 @@
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking/SNetListenSocket_t.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamInventory/SteamInventoryUpdateHandle_t.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs" />
-    <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamUGC/UGCUpdateHandle_t.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingIdentity.cs" />
+    <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamUGC/UGCUpdateHandle_t.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamTypes/SteamIPAddress_t.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamUserStats/SteamLeaderboardEntries_t.cs" />
-    <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverstats.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameservernetworkingmessages.cs" />
+    <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamgameserverstats.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamapps.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/autogen/isteamremoteplay.cs" />
     <Compile Include="Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamRemoteStorage/UGCHandle_t.cs" />

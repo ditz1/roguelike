@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.community.netcode.transport.steamnetworkingsockets": {
+      "version": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.steamnetworkingsockets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5cea8f048cc16f3575fabcf03af3ebafbc390499"
+    },
+    "com.rlabrecque.steamworks.net": {
+      "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0e37ffa9e7e55f8037c490c6401ccf3c61520c5a"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

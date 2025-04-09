@@ -22,7 +22,7 @@ AssetImportWorker0
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-52442
+52605
 -job-worker-count
 5
 -background-job-worker-count
@@ -68,7 +68,7 @@ Successfully changed project path to: /Users/daniel/Code/UnityProj/roguelike
     "memorysetup-temp-allocator-size-gfx=262144"
 Player connection [8316532800]  Target information:
 
-Player connection [8316532800]  * "[IP] 10.56.179.223 [Port] 0 [Flags] 2 [Guid] 784729275 [EditorId] 784729275 [Version] 1048832 [Id] OSXEditor(0,Daniels-MacBook-Pro-218.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
+Player connection [8316532800]  * "[IP] 192.168.1.12 [Port] 0 [Flags] 2 [Guid] 2933970682 [EditorId] 2933970682 [Version] 1048832 [Id] OSXEditor(0,Daniels-MacBook-Pro-218.local) [Debug] 1 [PackageName] OSXEditor [ProjectName] Editor" 
 
 Player connection [8316532800] Host joined multi-casting on [225.0.0.222:54997]...
 Player connection [8316532800] Host joined alternative multi-casting on [225.0.0.222:34997]...
@@ -83,7 +83,7 @@ Library Redirect Path: Library/
 [Physics::Module] SDK Version: 4.1.2
 [Physics::Module] Integration Version: 1.0.0
 [Physics::Module] Threading Mode: Multi-Threaded
-Refreshing native plugins compatible for Editor in 4.53 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 2.05 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 6000.0.44f1 (101c91f3a8fb)
 [Subsystems] Discovering subsystems at path /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Resources/UnitySubsystems
@@ -98,47 +98,47 @@ Initialize mono
 Mono path[0] = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Managed'
 Mono path[1] = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/MonoBleedingEdge/lib/mono/unityjit-macos'
 Mono config path = '/Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56187
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56074
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
 Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
 Register platform support module: /Applications/Unity/Hub/Editor/6000.0.44f1/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.007355 seconds.
-- Loaded All Assemblies, in  0.311 seconds
+Registered in 0.003638 seconds.
+- Loaded All Assemblies, in  0.260 seconds
 Native extension for WindowsStandalone target not found
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.273 seconds
-Domain Reload Profiling: 584ms
-	BeginReloadAssembly (111ms)
+- Finished resetting the current domain, in  0.240 seconds
+Domain Reload Profiling: 500ms
+	BeginReloadAssembly (78ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (0ms)
-	RebuildCommonClasses (27ms)
+	RebuildCommonClasses (26ms)
 	RebuildNativeTypeToScriptingClass (9ms)
-	initialDomainReloadingComplete (41ms)
-	LoadAllAssembliesAndSetupDomain (123ms)
-		LoadAssemblies (113ms)
+	initialDomainReloadingComplete (32ms)
+	LoadAllAssembliesAndSetupDomain (114ms)
+		LoadAssemblies (79ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (120ms)
-			TypeCache.Refresh (118ms)
-				TypeCache.ScanAssembly (107ms)
+		AnalyzeDomain (111ms)
+			TypeCache.Refresh (110ms)
+				TypeCache.ScanAssembly (100ms)
 			BuildScriptInfoCaches (0ms)
 			ResolveRequiredComponents (1ms)
-	FinalizeReload (273ms)
+	FinalizeReload (240ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (240ms)
+		SetupLoadedEditorAssemblies (208ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (29ms)
+			InitializePlatformSupportModulesInManaged (28ms)
 			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (42ms)
-			ProcessInitializeOnLoadAttributes (104ms)
-			ProcessInitializeOnLoadMethodAttributes (61ms)
+			BeforeProcessingInitializeOnLoad (38ms)
+			ProcessInitializeOnLoadAttributes (91ms)
+			ProcessInitializeOnLoadMethodAttributes (48ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -150,11 +150,11 @@ Import Worker Mode flag is 0x00
 Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
 Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.596 seconds
+- Loaded All Assemblies, in  0.532 seconds
 Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
 'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
 'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
-Refreshing native plugins compatible for Editor in 0.38 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 0.35 ms, found 3 plugins.
 Native extension for WindowsStandalone target not found
 Native extension for OSXStandalone target not found
 Native extension for WebGL target not found
@@ -163,98 +163,1051 @@ Package Manager log level set to [2]
 [Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
 [Package Manager] Unable to send message (not connected to server process).
 [Package Manager] Cannot connect to Unity Package Manager local server
-Refreshing native plugins compatible for Editor in 0.39 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 0.41 ms, found 3 plugins.
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.549 seconds
-Domain Reload Profiling: 1144ms
-	BeginReloadAssembly (94ms)
+- Finished resetting the current domain, in  0.498 seconds
+Domain Reload Profiling: 1030ms
+	BeginReloadAssembly (83ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (4ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (30ms)
-	RebuildCommonClasses (27ms)
-	RebuildNativeTypeToScriptingClass (9ms)
-	initialDomainReloadingComplete (21ms)
-	LoadAllAssembliesAndSetupDomain (445ms)
-		LoadAssemblies (285ms)
+		CreateAndSetChildDomain (27ms)
+	RebuildCommonClasses (28ms)
+	RebuildNativeTypeToScriptingClass (10ms)
+	initialDomainReloadingComplete (23ms)
+	LoadAllAssembliesAndSetupDomain (388ms)
+		LoadAssemblies (231ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (200ms)
-			TypeCache.Refresh (158ms)
-				TypeCache.ScanAssembly (132ms)
+		AnalyzeDomain (189ms)
+			TypeCache.Refresh (146ms)
+				TypeCache.ScanAssembly (131ms)
 			BuildScriptInfoCaches (32ms)
-			ResolveRequiredComponents (8ms)
-	FinalizeReload (549ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (498ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (443ms)
+		SetupLoadedEditorAssemblies (389ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (3ms)
+			InitializePlatformSupportModulesInManaged (2ms)
 			SetLoadedEditorAssemblies (3ms)
-			BeforeProcessingInitializeOnLoad (83ms)
-			ProcessInitializeOnLoadAttributes (288ms)
-			ProcessInitializeOnLoadMethodAttributes (67ms)
+			BeforeProcessingInitializeOnLoad (76ms)
+			ProcessInitializeOnLoadAttributes (254ms)
+			ProcessInitializeOnLoadMethodAttributes (53ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (2ms)
 Launching external process: /Applications/Unity/Hub/Editor/6000.0.44f1/Unity.app/Contents/Tools/UnityShaderCompiler
-Launched and connected shader compiler UnityShaderCompiler after 0.04 seconds
-Refreshing native plugins compatible for Editor in 0.60 ms, found 3 plugins.
+Launched and connected shader compiler UnityShaderCompiler after 0.03 seconds
+Refreshing native plugins compatible for Editor in 0.46 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 216 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 6923 unused Assets / (4.0 MB). Loaded Objects now: 7622.
-Memory consumption went from 168.7 MB to 164.7 MB.
-Total: 7.049166 ms (FindLiveObjects: 0.661500 ms CreateObjectMapping: 0.316667 ms MarkObjects: 4.058041 ms  DeleteObjects: 2.012500 ms)
+Unloading 6924 unused Assets / (4.4 MB). Loaded Objects now: 7623.
+Memory consumption went from 168.6 MB to 164.3 MB.
+Total: 5.892959 ms (FindLiveObjects: 0.397917 ms CreateObjectMapping: 0.231375 ms MarkObjects: 3.755958 ms  DeleteObjects: 1.507375 ms)
 
 ========================================================================
 Received Import Request.
-  Time since last request: 77094.057615 seconds.
-  path: Assets/Playerfull.prefab
-  artifactKey: Guid(e5e9de0991ec541d4978d6f889e32419) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Playerfull.prefab using Guid(e5e9de0991ec541d4978d6f889e32419) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '84d87eaa0299befda14edff69e0da19d') in 0.314017458 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 167
+  Time since last request: 78629.451724 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingSockets/ISteamNetworkingConnectionSignaling.cs
+  artifactKey: Guid(0cfb93a120f656a43b7e5969811789e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingSockets/ISteamNetworkingConnectionSignaling.cs using Guid(0cfb93a120f656a43b7e5969811789e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '81d1375211d9773eca1a680fb04bb812') in 0.003209291 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000049 seconds.
-  path: Assets/shabenemy.prefab
-  artifactKey: Guid(f025aae067eae4f27a4817a44ab7b7c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/shabenemy.prefab using Guid(f025aae067eae4f27a4817a44ab7b7c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '79e0539993e6e270750127309963eb39') in 0.047324375 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 49
+  Time since last request: 1.447823 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingSockets/ISteamNetworkingSignalingRecvContext.cs
+  artifactKey: Guid(fa2e1ae613a00394e93e19a1a9ffcdd9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingSockets/ISteamNetworkingSignalingRecvContext.cs using Guid(fa2e1ae613a00394e93e19a1a9ffcdd9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '081efb4fdfb1da5b1ac6772f7b194fa9') in 0.000256375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000043 seconds.
-  path: Assets/DefaultNetworkPrefabs.asset
-  artifactKey: Guid(a47dcf6ef149ad84ca84906e33b1a00b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/DefaultNetworkPrefabs.asset using Guid(a47dcf6ef149ad84ca84906e33b1a00b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '96abd32a59a2201b54012f0cfe0575f3') in 0.011266917 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 162
+  Time since last request: 3.758460 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/FSteamNetworkingSocketsDebugOutput.cs
+  artifactKey: Guid(01e845f5c7ac1344bb4f339a4517f229) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/FSteamNetworkingSocketsDebugOutput.cs using Guid(01e845f5c7ac1344bb4f339a4517f229) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3e054573d85d944d0ba047b97c15990d') in 0.0002195 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000042 seconds.
-  path: Assets/WeaponWall.prefab
-  artifactKey: Guid(ae0491f047b5d254b9421f749e23a29f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/WeaponWall.prefab using Guid(ae0491f047b5d254b9421f749e23a29f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd8ffff593b39921c51eb4b21901930f3') in 0.013443583 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 237
+  Time since last request: 8.027392 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingMessage_t.cs
+  artifactKey: Guid(be690315b0194d940a0efd3bb3184b90) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingMessage_t.cs using Guid(be690315b0194d940a0efd3bb3184b90) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0dbbcaff4c16be626254dedf64422839') in 0.000321375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.692618 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingMicroseconds.cs
+  artifactKey: Guid(e1e21ac0fb80e0646b09d95b609c47ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingMicroseconds.cs using Guid(e1e21ac0fb80e0646b09d95b609c47ae) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'dfe58455750ca4e0f551084b7dd7b68d') in 0.000239666 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.865090 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingPOPID.cs
+  artifactKey: Guid(c7173e2ce2d968348a916a5a34f69802) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingPOPID.cs using Guid(c7173e2ce2d968348a916a5a34f69802) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '4b24ebc7d0a05c637589614d43422532') in 0.00018625 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.823077 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingIPAddr.cs
+  artifactKey: Guid(cf91bd24bcddd80499a9a07ed0497513) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingIPAddr.cs using Guid(cf91bd24bcddd80499a9a07ed0497513) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c607a2d6c99173b5836c14ac128524a1') in 0.0001755 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.709533 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingIdentity.cs
+  artifactKey: Guid(88cd24c900131bb40959f94848afdebe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingIdentity.cs using Guid(88cd24c900131bb40959f94848afdebe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '53d5f74981b59e81cd5fa2480fbbdfd4') in 0.000285417 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.655096 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingErrMsg.cs
+  artifactKey: Guid(fd8272539368a044086b35f3cbab9243) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingErrMsg.cs using Guid(fd8272539368a044086b35f3cbab9243) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e586d3ab43c5e96429b0cf12c3842ee1') in 0.000203209 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.946492 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingConfigValue_t.cs
+  artifactKey: Guid(2b673ffa9a546ca4bad40431041e7588) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworkingTypes/SteamNetworkingConfigValue_t.cs using Guid(2b673ffa9a546ca4bad40431041e7588) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5219f6c64dcc28e6b69d0efbacfd7ffd') in 0.000173417 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.260230 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking
+  artifactKey: Guid(5dac59af1c5f6e84e80775c18fbe1a39) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking using Guid(5dac59af1c5f6e84e80775c18fbe1a39) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3e2a3baf04237161142ed7503473040c') in 0.000187958 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.681079 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking/SNetSocket_t.cs
+  artifactKey: Guid(513e29c43cea6fe43bae1ca068e814fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking/SNetSocket_t.cs using Guid(513e29c43cea6fe43bae1ca068e814fc) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8f56397a4c2baf41afb25656bb08a95c') in 0.000189208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.719361 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking/SNetListenSocket_t.cs
+  artifactKey: Guid(64b4f5fdd688b0f44a78b8f79471aaa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/types/SteamNetworking/SNetListenSocket_t.cs using Guid(64b4f5fdd688b0f44a78b8f79471aaa7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'b01889afa7d14203cd663079ea5dbadb') in 0.000308375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.244762 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/ISteamMatchmakingResponses.cs
+  artifactKey: Guid(577f601da41ba9c4d934e78cbf1edfa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/ISteamMatchmakingResponses.cs using Guid(577f601da41ba9c4d934e78cbf1edfa6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '81a158b4a77509d190aa38da7c4a7f87') in 0.000262 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.472243 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs
+  artifactKey: Guid(3c098e483776b9b4e9d4fd8af8558ba1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/Steam.cs using Guid(3c098e483776b9b4e9d4fd8af8558ba1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3fc050328a9be37585ae6975756263c2') in 0.000210791 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.628341 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime/autogen
+  artifactKey: Guid(1214e34c8204bed46a26ab9d7f6b5a7b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime/autogen using Guid(1214e34c8204bed46a26ab9d7f6b5a7b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3a1aa3b92306f9472ee7af28a3a23a25') in 0.000269625 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Prepare
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.54 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6911 unused Assets / (4.0 MB). Loaded Objects now: 7626.
+Memory consumption went from 134.2 MB to 130.1 MB.
+Total: 5.996959 ms (FindLiveObjects: 0.408416 ms CreateObjectMapping: 0.253750 ms MarkObjects: 3.850500 ms  DeleteObjects: 1.483709 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x338d8b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.420 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.42 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.54 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.502 seconds
+Domain Reload Profiling: 925ms
+	BeginReloadAssembly (104ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (23ms)
+	RebuildNativeTypeToScriptingClass (8ms)
+	initialDomainReloadingComplete (12ms)
+	LoadAllAssembliesAndSetupDomain (275ms)
+		LoadAssemblies (184ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (118ms)
+			TypeCache.Refresh (8ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (101ms)
+			ResolveRequiredComponents (7ms)
+	FinalizeReload (503ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (374ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (2ms)
+			BeforeProcessingInitializeOnLoad (80ms)
+			ProcessInitializeOnLoadAttributes (247ms)
+			ProcessInitializeOnLoadMethodAttributes (42ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.41 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 25 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.0 MB). Loaded Objects now: 7640.
+Memory consumption went from 155.8 MB to 151.8 MB.
+Total: 6.353583 ms (FindLiveObjects: 0.418333 ms CreateObjectMapping: 0.267959 ms MarkObjects: 4.159459 ms  DeleteObjects: 1.507583 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 565.373961 seconds.
+  path: Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef
+  artifactKey: Guid(44eda007a2ba54252936872fa5b0f323) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef using Guid(44eda007a2ba54252936872fa5b0f323) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '832fdd8b00c774a5940deb9a085f5eca') in 0.000982833 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 69.432412 seconds.
+  path: Assets/SteamTransport/Runtime/SteamNetworkingSocketsTransport.cs
+  artifactKey: Guid(f973ca31e238a43f88bcd84d67ae570a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/SteamTransport/Runtime/SteamNetworkingSocketsTransport.cs using Guid(f973ca31e238a43f88bcd84d67ae570a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '942f9b4af316e1fdcbbac617fd2d59e7') in 0.000450166 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 47.389714 seconds.
+  path: Assets/com.rlabrecque.steamworks.net/Runtime
+  artifactKey: Guid(376866c7c50f30c4093ff0997e4dab4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/com.rlabrecque.steamworks.net/Runtime using Guid(376866c7c50f30c4093ff0997e4dab4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ed4c85bc44342b7153afdaaa8ef2d430') in 0.0007575 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Prepare
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.87 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6910 unused Assets / (3.2 MB). Loaded Objects now: 7640.
+Memory consumption went from 147.8 MB to 144.7 MB.
+Total: 14.346125 ms (FindLiveObjects: 0.457542 ms CreateObjectMapping: 0.252167 ms MarkObjects: 12.256500 ms  DeleteObjects: 1.379334 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x330713000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.479 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.36 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.52 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.502 seconds
+Domain Reload Profiling: 984ms
+	BeginReloadAssembly (133ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (5ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (57ms)
+	RebuildCommonClasses (27ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (13ms)
+	LoadAllAssembliesAndSetupDomain (299ms)
+		LoadAssemblies (200ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (140ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (117ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (503ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (374ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (78ms)
+			ProcessInitializeOnLoadAttributes (250ms)
+			ProcessInitializeOnLoadMethodAttributes (40ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.40 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.1 MB). Loaded Objects now: 7642.
+Memory consumption went from 154.0 MB to 149.9 MB.
+Total: 5.898417 ms (FindLiveObjects: 0.386500 ms CreateObjectMapping: 0.255834 ms MarkObjects: 3.788625 ms  DeleteObjects: 1.467125 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 233.583690 seconds.
+  path: Packages/com.unity.ide.rider/Rider/Editor/com.unity.ide.rider.asmdef
+  artifactKey: Guid(d528c8c98d269ca44a06cd9624a03945) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.ide.rider/Rider/Editor/com.unity.ide.rider.asmdef using Guid(d528c8c98d269ca44a06cd9624a03945) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '9f9e3664f81ae87e59143eac82383f83') in 0.001959208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000052 seconds.
+  path: Packages/com.unity.timeline/DocCodeExamples/DocCodeExamples.asmdef
+  artifactKey: Guid(9550f6b9c1ac87345a996c43f204fb30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.timeline/DocCodeExamples/DocCodeExamples.asmdef using Guid(9550f6b9c1ac87345a996c43f204fb30) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '3a4d80af8227f405abcdd5f4a131c0fb') in 0.000325875 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000028 seconds.
+  path: Packages/com.unity.netcode.gameobjects/Editor/CodeGen/com.unity.netcode.editor.codegen.asmdef
+  artifactKey: Guid(fe4fa159f4a96442ba22af67ddf20c65) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.netcode.gameobjects/Editor/CodeGen/com.unity.netcode.editor.codegen.asmdef using Guid(fe4fa159f4a96442ba22af67ddf20c65) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5a97eba6b62076ea252c1f515e43b681') in 0.000238958 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Packages/com.unity.inputsystem/DocCodeSamples.Tests/DocCodeSamples.asmdef
+  artifactKey: Guid(41b01d3964f844d8b43923c18b3a9a6f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.inputsystem/DocCodeSamples.Tests/DocCodeSamples.asmdef using Guid(41b01d3964f844d8b43923c18b3a9a6f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '83ab9fce91f939933d98e7f2d61db811') in 0.000275541 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000040 seconds.
+  path: Packages/com.unity.netcode.gameobjects/TestHelpers/Runtime/com.unity.netcode.testhelpers.runtime.asmdef
+  artifactKey: Guid(101012598ee9f064da897a34e72947f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.netcode.gameobjects/TestHelpers/Runtime/com.unity.netcode.testhelpers.runtime.asmdef using Guid(101012598ee9f064da897a34e72947f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6a3bd6905ff43645d781b3cd6d40b36c') in 0.000267 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000041 seconds.
+  path: Packages/com.unity.collections/DocCodeSamples.Tests/DocCodeSamples.Tests.asmdef
+  artifactKey: Guid(d1fecb7e41996c7468b18df518b721d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.collections/DocCodeSamples.Tests/DocCodeSamples.Tests.asmdef using Guid(d1fecb7e41996c7468b18df518b721d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2aac10dfaf18ded9fae952d28b72f7fd') in 0.000279958 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.209733 seconds.
+  path: Packages/com.unity.2d.sprite/Tests/Editor/Unity.2D.Sprite.Package.EditorTests.asmdef
+  artifactKey: Guid(52648b72c7bef2040bf0cfa8dd0f74da) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.2d.sprite/Tests/Editor/Unity.2D.Sprite.Package.EditorTests.asmdef using Guid(52648b72c7bef2040bf0cfa8dd0f74da) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '276ebce5062bc75119b94831c281184f') in 0.000665208 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Packages/com.unity.ai.navigation/Editor/ConversionSystem/Unity.AI.Navigation.Editor.ConversionSystem.asmdef
+  artifactKey: Guid(c57630adab7a340ec94f10e4fcac12f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.ai.navigation/Editor/ConversionSystem/Unity.AI.Navigation.Editor.ConversionSystem.asmdef using Guid(c57630adab7a340ec94f10e4fcac12f1) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c0822299b90fa57f2b33eca1b7a47ddb') in 0.000333375 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.127243 seconds.
+  path: Packages/com.unity.transport/Runtime/Unity.Networking.Transport.asmdef
+  artifactKey: Guid(f2d49d9fa7e7eb3418e39723a7d3b92f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.transport/Runtime/Unity.Networking.Transport.asmdef using Guid(f2d49d9fa7e7eb3418e39723a7d3b92f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'fe068eed1dee7cde501c48731a0f159f') in 0.000229417 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x330713000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.511 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.52 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.54 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.531 seconds
+Domain Reload Profiling: 1045ms
+	BeginReloadAssembly (163ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (9ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (65ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (19ms)
+	LoadAllAssembliesAndSetupDomain (297ms)
+		LoadAssemblies (198ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (141ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (122ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (531ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (394ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (81ms)
+			ProcessInitializeOnLoadAttributes (264ms)
+			ProcessInitializeOnLoadMethodAttributes (44ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.58 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.2 MB). Loaded Objects now: 7644.
+Memory consumption went from 153.9 MB to 149.7 MB.
+Total: 6.520125 ms (FindLiveObjects: 0.459291 ms CreateObjectMapping: 0.309583 ms MarkObjects: 3.977292 ms  DeleteObjects: 1.773917 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 28.125981 seconds.
+  path: Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef
+  artifactKey: Guid(44eda007a2ba54252936872fa5b0f323) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef using Guid(44eda007a2ba54252936872fa5b0f323) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '0200ac186b9e7cc65cbf6a5b6b8d597e') in 0.00117775 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x330713000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.452 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.40 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.50 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.481 seconds
+Domain Reload Profiling: 936ms
+	BeginReloadAssembly (105ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (44ms)
+	RebuildCommonClasses (26ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (13ms)
+	LoadAllAssembliesAndSetupDomain (301ms)
+		LoadAssemblies (206ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (124ms)
+			TypeCache.Refresh (7ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (107ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (482ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (362ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (2ms)
+			BeforeProcessingInitializeOnLoad (72ms)
+			ProcessInitializeOnLoadAttributes (243ms)
+			ProcessInitializeOnLoadMethodAttributes (42ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.63 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.0 MB). Loaded Objects now: 7646.
+Memory consumption went from 153.8 MB to 149.9 MB.
+Total: 6.272375 ms (FindLiveObjects: 0.410167 ms CreateObjectMapping: 0.292792 ms MarkObjects: 3.954791 ms  DeleteObjects: 1.614125 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x16bf0b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.436 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.35 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.45 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.506 seconds
+Domain Reload Profiling: 944ms
+	BeginReloadAssembly (102ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (42ms)
+	RebuildCommonClasses (24ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (12ms)
+	LoadAllAssembliesAndSetupDomain (290ms)
+		LoadAssemblies (189ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (129ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (110ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (506ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (382ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (3ms)
+			SetLoadedEditorAssemblies (3ms)
+			BeforeProcessingInitializeOnLoad (75ms)
+			ProcessInitializeOnLoadAttributes (259ms)
+			ProcessInitializeOnLoadMethodAttributes (41ms)
+			AfterProcessingInitializeOnLoad (0ms)
+			EditorAssembliesLoaded (1ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Refreshing native plugins compatible for Editor in 0.53 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.3 MB). Loaded Objects now: 7648.
+Memory consumption went from 153.7 MB to 149.5 MB.
+Total: 6.277042 ms (FindLiveObjects: 0.461541 ms CreateObjectMapping: 0.385959 ms MarkObjects: 3.851291 ms  DeleteObjects: 1.578125 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 136.876648 seconds.
+  path: Packages/com.unity.render-pipelines.universal/Editor/Converter/PPv2/PPv2ToURPConvertersDefinition.asmdef
+  artifactKey: Guid(3fa284cf2189b184e8d506b83da68377) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Packages/com.unity.render-pipelines.universal/Editor/Converter/PPv2/PPv2ToURPConvertersDefinition.asmdef using Guid(3fa284cf2189b184e8d506b83da68377) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6607f1742d424671d4c121f3279b9b74') in 0.001309292 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x16bf0b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.427 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.34 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.49 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.452 seconds
+Domain Reload Profiling: 882ms
+	BeginReloadAssembly (106ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (46ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (14ms)
+	LoadAllAssembliesAndSetupDomain (276ms)
+		LoadAssemblies (172ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (132ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (113ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (452ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (334ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (2ms)
+			BeforeProcessingInitializeOnLoad (68ms)
+			ProcessInitializeOnLoadAttributes (222ms)
+			ProcessInitializeOnLoadMethodAttributes (38ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (5ms)
+Refreshing native plugins compatible for Editor in 0.49 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.1 MB). Loaded Objects now: 7650.
+Memory consumption went from 153.7 MB to 149.7 MB.
+Total: 5.931625 ms (FindLiveObjects: 0.437334 ms CreateObjectMapping: 0.251333 ms MarkObjects: 3.768250 ms  DeleteObjects: 1.474417 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x16bf0b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.464 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.39 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.54 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.509 seconds
+Domain Reload Profiling: 976ms
+	BeginReloadAssembly (118ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (4ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (51ms)
+	RebuildCommonClasses (26ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (13ms)
+	LoadAllAssembliesAndSetupDomain (300ms)
+		LoadAssemblies (191ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (139ms)
+			TypeCache.Refresh (10ms)
+				TypeCache.ScanAssembly (1ms)
+			BuildScriptInfoCaches (116ms)
+			ResolveRequiredComponents (8ms)
+	FinalizeReload (510ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (374ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (85ms)
+			ProcessInitializeOnLoadAttributes (243ms)
+			ProcessInitializeOnLoadMethodAttributes (40ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.51 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.0 MB). Loaded Objects now: 7652.
+Memory consumption went from 153.6 MB to 149.6 MB.
+Total: 5.908458 ms (FindLiveObjects: 0.440958 ms CreateObjectMapping: 0.291917 ms MarkObjects: 3.785250 ms  DeleteObjects: 1.389916 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x16bf0b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.420 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.39 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.51 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.501 seconds
+Domain Reload Profiling: 925ms
+	BeginReloadAssembly (104ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (3ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (45ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (13ms)
+	LoadAllAssembliesAndSetupDomain (271ms)
+		LoadAssemblies (162ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (135ms)
+			TypeCache.Refresh (7ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (118ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (501ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (374ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (78ms)
+			ProcessInitializeOnLoadAttributes (249ms)
+			ProcessInitializeOnLoadMethodAttributes (41ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (9ms)
+Refreshing native plugins compatible for Editor in 0.47 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (3.9 MB). Loaded Objects now: 7654.
+Memory consumption went from 153.6 MB to 149.7 MB.
+Total: 6.155000 ms (FindLiveObjects: 0.449375 ms CreateObjectMapping: 0.370917 ms MarkObjects: 3.725125 ms  DeleteObjects: 1.609083 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Prepare
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.54 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6910 unused Assets / (4.1 MB). Loaded Objects now: 7654.
+Memory consumption went from 147.6 MB to 143.5 MB.
+Total: 7.577334 ms (FindLiveObjects: 0.415583 ms CreateObjectMapping: 0.251583 ms MarkObjects: 5.345250 ms  DeleteObjects: 1.564333 ms)
+
+Prepare: number of updated asset objects reloaded= 2
+========================================================================
+Received Import Request.
+  Time since last request: 342.344095 seconds.
+  path: Assets/CornerTile.prefab
+  artifactKey: Guid(f0d08805450dd4d77b94fb038647f98a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/CornerTile.prefab using Guid(f0d08805450dd4d77b94fb038647f98a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '2eb153f55e82dd154e14fd0757cea7bb') in 0.683503 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 21
+
+========================================================================
+Received Prepare
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+Begin MonoManager ReloadAssembly
+Thread 0x16bf0b000 may have been prematurely finalized
+- Loaded All Assemblies, in  0.465 seconds
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.79 ms, found 3 plugins.
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly with name 'SteamNetworkingSockets Transport for Netcode for GameObjects' already exists (Assets/SteamTransport/Runtime/com.community.netcode.transport.steamnetworkingsockets.asmdef)
+Assembly reference Packages/com.unity.cinemachine/Editor/Samples/ExposeHDRPInternals/HDRP-Editor-ref.asmref has no target assembly definition
+Script 'Packages/com.community.netcode.transport.steamnetworkingsockets/Runtime/SteamNetworkingSocketsTransport.cs' will not be compiled because it exists outside the Assets folder and does not to belong to any assembly definition file.
+[Package Manager] Failed to launch server process. Reason: Unity was launched with the -noUpm command-line argument
+[Package Manager] Unable to send message (not connected to server process).
+[Package Manager] Cannot connect to Unity Package Manager local server
+Refreshing native plugins compatible for Editor in 0.55 ms, found 3 plugins.
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.537 seconds
+Domain Reload Profiling: 1005ms
+	BeginReloadAssembly (127ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (11ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (56ms)
+	RebuildCommonClasses (25ms)
+	RebuildNativeTypeToScriptingClass (9ms)
+	initialDomainReloadingComplete (14ms)
+	LoadAllAssembliesAndSetupDomain (293ms)
+		LoadAssemblies (184ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (138ms)
+			TypeCache.Refresh (9ms)
+				TypeCache.ScanAssembly (0ms)
+			BuildScriptInfoCaches (119ms)
+			ResolveRequiredComponents (9ms)
+	FinalizeReload (537ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (401ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (2ms)
+			SetLoadedEditorAssemblies (4ms)
+			BeforeProcessingInitializeOnLoad (92ms)
+			ProcessInitializeOnLoadAttributes (258ms)
+			ProcessInitializeOnLoadMethodAttributes (44ms)
+			AfterProcessingInitializeOnLoad (1ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (6ms)
+Refreshing native plugins compatible for Editor in 0.46 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6922 unused Assets / (4.4 MB). Loaded Objects now: 7687.
+Memory consumption went from 166.2 MB to 161.8 MB.
+Total: 6.061458 ms (FindLiveObjects: 0.422458 ms CreateObjectMapping: 0.284208 ms MarkObjects: 3.774417 ms  DeleteObjects: 1.580166 ms)
+
+Prepare: number of updated asset objects reloaded= 0
+========================================================================
+Received Import Request.
+  Time since last request: 3.124377 seconds.
+  path: Assets/room_platform.prefab
+  artifactKey: Guid(6dbede199bce14781a1d03547a6b140d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/room_platform.prefab using Guid(6dbede199bce14781a1d03547a6b140d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c1c8da2b2959a0918cca801d9aabc28a') in 0.263635125 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 29
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000074 seconds.
+  path: Assets/Tile_B.prefab
+  artifactKey: Guid(f96442df40a0bf74bbd6431cf2ee05d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tile_B.prefab using Guid(f96442df40a0bf74bbd6431cf2ee05d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a6cd61671931f5d5dbaffb28edde84ea') in 0.019334875 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 66
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000048 seconds.
+  path: Assets/platform_mat.mat
+  artifactKey: Guid(3815e6fe054f7764194be8e8b76b6eb3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/platform_mat.mat using Guid(3815e6fe054f7764194be8e8b76b6eb3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'a679792fe3b70386a5a4ec15933c8a27') in 0.028401458 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000044 seconds.
+  path: Assets/enemy.mat
+  artifactKey: Guid(b52b6420e8195f94c94595ef7d9c4953) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/enemy.mat using Guid(b52b6420e8195f94c94595ef7d9c4953) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd2458a79fc7a36ea69462c762b0f7d2e') in 0.005197083 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000044 seconds.
   path: Assets/Enemy.prefab
   artifactKey: Guid(308327b87b84d954284414409f696abe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Enemy.prefab using Guid(308327b87b84d954284414409f696abe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '89011737d7bee41abe0e3f0d96bc5577') in 0.007564792 seconds
+Start importing Assets/Enemy.prefab using Guid(308327b87b84d954284414409f696abe) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5e0688461cad00fae8a95728d3af55a3') in 0.015304333 seconds
 Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 53
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000049 seconds.
-  path: Assets/DungeonSpawner.prefab
-  artifactKey: Guid(b08282e64f04f85499e32c646cfe77d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/DungeonSpawner.prefab using Guid(b08282e64f04f85499e32c646cfe77d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '44f2b094f36a2b059fe79e8e87b7cd55') in 0.042856792 seconds
-Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 666
+  Time since last request: 0.000034 seconds.
+  path: Assets/player_mat.mat
+  artifactKey: Guid(068aa717d3b7748488ed95e83cff926f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/player_mat.mat using Guid(068aa717d3b7748488ed95e83cff926f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '5b7d80d437219b7fb5a29270cb0309bd') in 0.005984583 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
 
+========================================================================
+Received Prepare
+'Packages/com.unity.cinemachine/Editor/Obsolete/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+'Packages/com.unity.cinemachine/Editor/Editors/CinemachineVirtualCameraBaseEditor.cs' contains partial class of Unity.Object, exactly 1 of the partial classes needs to be in a file with the same filename. This is to know the one that can be referenced from ie. GameObjects
+Refreshing native plugins compatible for Editor in 0.70 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 15 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6913 unused Assets / (3.7 MB). Loaded Objects now: 7863.
+Memory consumption went from 164.8 MB to 161.0 MB.
+Total: 9.609666 ms (FindLiveObjects: 0.501042 ms CreateObjectMapping: 0.296208 ms MarkObjects: 7.202417 ms  DeleteObjects: 1.609541 ms)
+
+Prepare: number of updated asset objects reloaded= 0
 Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
 AssetImportWorker is now disconnected from the server
 Process exiting
