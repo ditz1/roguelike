@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using Steamworks;
 
 namespace HelloWorld
 {
@@ -22,17 +23,57 @@ namespace HelloWorld
             else
             {
                 StatusLabels();
-
             }
-
             GUILayout.EndArea();
+        }
+
+        bool IsSteamReady()
+        {
+            return SteamAPI.IsSteamRunning();
         }
 
         void StartButtons()
         {
-            if (GUILayout.Button("Host")) m_NetworkManager.StartHost();
-            if (GUILayout.Button("Client")) m_NetworkManager.StartClient();
-            if (GUILayout.Button("Server")) m_NetworkManager.StartServer();
+            if (GUILayout.Button("Host"))
+            {
+                if (IsSteamReady())
+                {
+                    m_NetworkManager.StartHost();
+                }
+                else
+                {
+                    Debug.LogWarning("Steam is not running.");
+                }
+            }
+
+            if (GUILayout.Button("Client"))
+            {
+                Debug.Log("client start");
+                if (IsSteamReady())
+                {
+                    var transport = m_NetworkManager.NetworkConfig.NetworkTransport;
+                    // Use reflection to set ConnectToSteamID if the type has it
+                    var field = transport.GetType().GetField("ConnectToSteamID");
+                    if (field != null)
+                    {
+                        field.SetValue(transport, 76561198153860112);
+                        Debug.Log("ConnectToSteamID set via reflection.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Could not set ConnectToSteamID: transport doesn't expose the field.");
+                    }
+
+                    m_NetworkManager.StartClient();
+                } else {
+                    Debug.Log("Steam is not running.");
+                }
+            }
+
+            if (GUILayout.Button("Server"))
+            {
+                if (IsSteamReady()) m_NetworkManager.StartServer();
+            }
         }
 
         void StatusLabels()
@@ -44,6 +85,5 @@ namespace HelloWorld
                 m_NetworkManager.NetworkConfig.NetworkTransport.GetType().Name);
             GUILayout.Label("Mode: " + mode);
         }
-
     }
 }

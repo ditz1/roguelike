@@ -13,6 +13,7 @@ public class PlayerController : NetworkBehaviour
     RaycastHit contact;
     Camera cam;
     public GameObject bullet;
+    NetworkManager networkManager;
    
     float maxPlatformHeight = 0.25f;  
     //float platformCheckDistance = 2.6f;  
@@ -116,6 +117,7 @@ public class PlayerController : NetworkBehaviour
     // this is basically start method
     public override void OnNetworkSpawn()
     {
+        networkManager = NetworkManager.Singleton;
         rb = GetComponent<Rigidbody>();
         cam = GetComponentInChildren<Camera>();
         player_look = new Ray(cam.transform.position, cam.transform.forward);
