@@ -51,23 +51,28 @@ namespace HelloWorld
                 Debug.Log("client start");
                 if (IsSteamReady())
                 {
-                    var transport = m_NetworkManager.NetworkConfig.NetworkTransport;
-                    // Use reflection to set ConnectToSteamID if the type has it
-                    var field = transport.GetType().GetField("ConnectToSteamID");
-                    if (field != null)
+                    // Get the transport component
+                    var steamTransport = m_NetworkManager.NetworkConfig.NetworkTransport;
+
+                    // SteamID MUST be a CSteamID object and set in this way
+                    var steamIDProperty = steamTransport.GetType().GetField("ConnectToSteamID");
+                    if (steamIDProperty != null)
                     {
-                        field.SetValue(transport, 76561198153860112);
-                        Debug.Log("ConnectToSteamID set via reflection.");
-                    }
-                    else
-                    {
-                        Debug.LogWarning("Could not set ConnectToSteamID: transport doesn't expose the field.");
+                        CSteamID steamID = new CSteamID(76561198153860112);
+                        // Extract the uint64 value from the CSteamID object
+                        ulong steamIDValue = steamID.m_SteamID;
+                        steamIDProperty.SetValue(steamTransport, steamIDValue);
+                        Debug.Log("Set Steam ID: " + steamIDValue);
                     }
 
+                    // Start client with additional logging
+                    Debug.Log("Starting client...");
                     m_NetworkManager.StartClient();
+                    Debug.Log("StartClient method called");
                 } else {
-                    Debug.Log("Steam is not running.");
+                    Debug.LogError("Steam is not running.");
                 }
+                Debug.Log("client start 2");
             }
 
             if (GUILayout.Button("Server"))
