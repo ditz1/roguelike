@@ -226,7 +226,7 @@ public class DungeonManager : MonoBehaviour
         } else {
             // Valid Stage found, instantiate player
             Destroy(GameObject.FindWithTag("Player"));
-            InstantiatePlayer();
+            //InstantiatePlayer();
         }
     }
     
@@ -237,13 +237,13 @@ public class DungeonManager : MonoBehaviour
         rooms.Clear();
 
         List<int> room_sizes = new List<int>();
-        room_sizes.Add(20); // Spawn room
-        room_sizes.Add(25); // Entry room
+        room_sizes.Add(30); // Spawn room
+        room_sizes.Add(45); // Entry room
         room_sizes.Add(70); // Ballroom
-        room_sizes.Add(25); // Shop
+        room_sizes.Add(45); // Shop
         //room_sizes.Add(25); // Boss room
         //room_sizes.Add(30);
-        room_sizes.Add(20); // Exit room
+        room_sizes.Add(30); // Exit room
         
 
         for (int i = 0; i < room_sizes.Count; i++)
@@ -261,10 +261,6 @@ public class DungeonManager : MonoBehaviour
         room.width = width;
         room.height = height;
         room.type = type;
-        if (type != 2){
-            room.width *= 2;
-            room.height *= 2;
-        }
         room.placed = false;
         // these are set by default but will be changed
         room.entryDir = Direction.NORTH;  // Default

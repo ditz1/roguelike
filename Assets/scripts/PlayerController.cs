@@ -82,10 +82,10 @@ public class PlayerController : NetworkBehaviour
     {
                 
         // this is just needed for debugging
-        //if (Display.displays.Length > 1)
-        //{
-        //    Display.displays[1].Activate();
-        //}
+        if (Display.displays.Length > 1)
+        {
+            Display.displays[1].Activate();
+        }
         
         // adjust weapon params based on weapon prefab
         // try to find a weapon if player already has one
@@ -151,6 +151,7 @@ public class PlayerController : NetworkBehaviour
             if (IsOwner) {
                 Debug.Log("This is local player - masking model to MaskToPlayer layer");
                 MaskObjectToLayer(playerModel, "MaskToPlayer");
+                MaskObjectToLayer(weapon, "FirstPersonOnly"); // this may break when testing back with multiplayer
             } else {
                 Debug.Log("This is remote player - keeping model on Default layer");
                 MaskObjectToLayer(playerModel, "Default");

@@ -21,6 +21,9 @@ public class EnemyBomber : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (enemyController.player == null) return;
+
+        
         distance_to_player = enemyController.player.position - transform.position;
         if (distance_to_player.magnitude < bomber_range)
         {
