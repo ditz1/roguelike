@@ -639,7 +639,14 @@ public class PlayerController : NetworkBehaviour
                     mag_in_place = false;
                 } else {
                     Vector3 magMovePos = weaponMagazine.transform.localPosition;
-                    magMovePos.z += 0.5f;
+                    
+                    // bandaid fix for now
+                    if (weapon.name.Contains("ak")){
+                        magMovePos.x -= 0.5f;
+                    } else {
+                        magMovePos.z += 0.5f;
+                    }
+                    
                     weaponMagazine.transform.localPosition = Vector3.Lerp(
                         weaponMagazine.transform.localPosition,
                         magMovePos,
