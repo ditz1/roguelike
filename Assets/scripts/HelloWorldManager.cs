@@ -29,6 +29,7 @@ namespace HelloWorld
             connect_screen.SetActive(false);
             chosen_host_name = "none"; // reset the chosen host name
             chosen_host = new CSteamID(0);
+            // this could probably break if player resets lobby
         }
 
         void OnGUI()
@@ -119,26 +120,6 @@ namespace HelloWorld
                 }
 
 
-                // // Get the transport component
-                // var steamTransport = m_NetworkManager.NetworkConfig.NetworkTransport;
-
-                // // SteamID MUST be a CSteamID object and set in this way
-                // var steamIDProperty = steamTransport.GetType().GetField("ConnectToSteamID");
-                // if (steamIDProperty != null)
-                // {
-                //     CSteamID steamID = new CSteamID(76561198153860112);
-                //     // Extract the uint64 value from the CSteamID object
-                //     ulong steamIDValue = steamID.m_SteamID;
-                //     steamIDProperty.SetValue(steamTransport, steamIDValue);
-                //     Debug.Log("Set Steam ID: " + steamIDValue);
-                // }
-
-
-
-                // // Start client with additional logging
-                // Debug.Log("Starting client...");
-                // m_NetworkManager.StartClient();
-                // Debug.Log("StartClient method called");
             }
             else
             {
