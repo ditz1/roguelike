@@ -13,6 +13,8 @@ public class PlayerController : NetworkBehaviour
     RaycastHit contact;
     Camera cam;
     public GameObject bullet;
+
+    ParticleSystem muzzleFlash;
     NetworkManager networkManager;
    
     float maxPlatformHeight = 0.25f;  
@@ -23,7 +25,7 @@ public class PlayerController : NetworkBehaviour
     private Vector3 climbTargetPosition;
     
     // Bullet settings
-    public float bulletSpeed = 700f;
+    public float bulletSpeed = 20000f;
     public Transform bulletSpawnPoint;
     public float fireRate = 0.1f;
     private float nextFireTime = 0f;
@@ -39,7 +41,11 @@ public class PlayerController : NetworkBehaviour
 
     float gravity_scalar = 0.5f;
 
-    bool mag_in_place = true; // specifically for the animation of reloading 
+    Quaternion default_weapon_rotation = Quaternion.Euler(0, 0, 0);
+
+    bool mag_in_place = true; // specifically for the animation of reloading
+
+    float sway_ticker = 0.0f; 
 
     GameObject right_hand;
     GameObject left_hand;
@@ -257,21 +263,24 @@ public class PlayerController : NetworkBehaviour
         player_look.origin = cam.transform.position;
         player_look.direction = cam.transform.forward;
 
-        if (weapon_equipped){   
+        if (weapon_equipped)
+        {
             AdjustWeaponPosition();
             WeaponSway(); // sway weapon based on player movement
             // only adjust if camera X rotation is > -15 degrees and < 30
             if (NormalizeAngle(cam.transform.localEulerAngles.x) > -15 && NormalizeAngle(cam.transform.localEulerAngles.x) < 30)
             {
-                 if (!isReloading){
+                if (!isReloading)
+                {
                     AdjustFirstPersonHandsPosition(); // adjust weapon position for first person view
-                 }
+                }
             }
 
             // Shoot with rate limiting
             if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
             {
-                if (!isReloading){
+                if (!isReloading)
+                {
                     nextFireTime = Time.time + fireRate; // Set next allowed fire time
                     FireBullet();
                 }
@@ -286,6 +295,10 @@ public class PlayerController : NetworkBehaviour
             {
                 ReloadWeapon();
             }
+        }
+        else
+        {
+            SwayFists();
         }
 
         Debug.DrawRay(player_look.origin, player_look.direction * 100, Color.red);
@@ -309,8 +322,10 @@ public class PlayerController : NetworkBehaviour
         float jump_force = 10.0f;
 
         Vector3 inputDir = Vector3.zero;
+        playerMoveState = PlayerMoveState.IDLE; // reset state to idle
 
-        if (Input.GetKey(KeyCode.W)) {
+        if (Input.GetKey(KeyCode.W))
+        {
             playerMoveState = PlayerMoveState.RUN_FORWARD;
             inputDir += transform.forward;
         }
@@ -372,8 +387,46 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    void SwayFists()
+    {
+
+        if (first_person_lh == null || first_person_rh == null)
+        {
+            // if these are null we have to find the fists, will be in weapon container
+            GameObject cameraobj = FindChildInObject(this.gameObject, "Main Camera");
+            GameObject weaponContainer = FindChildInObject(cameraobj, "weapon");
+            weapon_container = weaponContainer;
+            default_weapon_rotation = weapon_container.transform.localRotation;
+        }
+        
+         
+        // tilt fists up and down when moving slighting
+        if (playerMoveState != PlayerMoveState.IDLE)
+        {
+            sway_ticker += Time.deltaTime;
+            float swayAmount = Mathf.Sin(sway_ticker * 3f) * 2f; // 3f controls speed, 2f controls intensity
+            weapon_container.transform.localRotation = Quaternion.Euler(swayAmount, -0.5f, 1.5f);
+        }
+        else
+        {
+            // Smoothly return to default when idle
+            weapon_container.transform.localRotation = Quaternion.Lerp(
+                weapon_container.transform.localRotation,
+                default_weapon_rotation,
+                Time.deltaTime * 5f
+            );
+        }
+    }
+
     void Actions()
     {
+        // swap fists if no weapon
+        //if (weapon == null)
+        //{
+        //    first_person_lh.transform.position += new Vector3(0, 0.1f, 0); // move left hand up
+        //    first_person_rh.transform.position += new Vector3(0, 0.1f, 0); // move right hand up
+        //}
+        
         if (Input.GetKeyDown(KeyCode.F)) // m1
         {
             PickUpWeapon();
@@ -518,6 +571,13 @@ public class PlayerController : NetworkBehaviour
         }
 
         bulletSpawnPoint = FindChildInObject(weapon, "barrel")?.transform;
+
+        muzzleFlash = FindChildInObject(weapon, "muzzleflash")?.GetComponent<ParticleSystem>();
+        if (muzzleFlash == null)
+        {
+            Debug.LogWarning("Muzzle flash not found on weapon!");
+        }
+
         weapon_rh_pos = FindChildInObject(external_view_weapon, "RHgrabpos");
         weapon_lh_pos = FindChildInObject(external_view_weapon, "LHgrabpos");
         weaponMagazine = FindChildInObject(weapon, "mag");
@@ -711,20 +771,20 @@ public class PlayerController : NetworkBehaviour
     void FireBullet()
     {
         WeaponRecoil();
-        
+
         if (bullet != null)
         {
-            // Check if the hit object is an enemy
-            bool hit = Physics.Raycast(player_look, out contact, 100);
-
-            // Determine spawn position
-            Vector3 spawnPosition = bulletSpawnPoint != null ? 
+            // Capture firing data at the moment of shooting
+            Vector3 fireOrigin = cam.transform.position;
+            Vector3 fireDirection = cam.transform.forward;
+            Vector3 startPoint = bulletSpawnPoint != null ? 
                 bulletSpawnPoint.position : 
-                cam.transform.position + cam.transform.forward * 1f;
+                fireOrigin + fireDirection * 1f;
 
-            // Default direction is forward from camera
-            Vector3 direction = cam.transform.forward;
-            Vector3 targetPoint;
+            // Get the exact end point from raycast
+            Vector3 endPoint;
+            bool hit = Physics.Raycast(fireOrigin, fireDirection, out contact, 100);
+            muzzleFlash?.Play(); // Play muzzle flash effect if available
 
             if (hit && contact.collider != null)
             {
@@ -734,47 +794,36 @@ public class PlayerController : NetworkBehaviour
                 {
                     enemy.TakeDamage(10);
                 }
-
-                // Use the hit point for direction
-                targetPoint = contact.point;
+                endPoint = contact.point;
             }
             else
             {
-                // No hit, so target a point far in the distance
-                targetPoint = cam.transform.position + cam.transform.forward * 100f;
+                // No hit, use a point far along the raycast line
+                endPoint = fireOrigin + fireDirection * 100f;
             }
 
-            // Calculate direction from spawn point to target point
-            Vector3 directionToTarget = targetPoint - spawnPosition;
+            // Create bullet with NO rigidbody
+            GameObject newBullet = Instantiate(bullet);
+            newBullet.transform.position = startPoint;
+            newBullet.transform.SetParent(null);
 
-            // Create rotation to look at the target point
-            Quaternion bulletRotation = Quaternion.LookRotation(directionToTarget);
-
-            // Rotate 90 degrees to align cylinder's long axis with direction of travel
-            bulletRotation *= Quaternion.Euler(90, 0, 0);
-
-            // Create bullet with the calculated rotation
-            GameObject newBullet = Instantiate(bullet, spawnPosition, bulletRotation);
-
-            // Get or add rigidbody to bullet
-            Rigidbody bulletRb = newBullet.GetComponent<Rigidbody>();
-            if (bulletRb == null)
+            // Remove any rigidbody if it exists
+            Rigidbody existingRb = newBullet.GetComponent<Rigidbody>();
+            if (existingRb != null)
             {
-                bulletRb = newBullet.AddComponent<Rigidbody>();
+                Destroy(existingRb);
             }
-            newBullet.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 
-            // Configure bullet physics
-            bulletRb.constraints = RigidbodyConstraints.FreezeRotation;
-            bulletRb.mass = 1.0f;
-            bulletRb.useGravity = false;
-            // turn off collisions for bullets
+            newBullet.transform.localScale = new Vector3(0.35f, 0.35f, 0.35f);
 
-            // Apply velocity in direction of hit point
-            bulletRb.linearVelocity = directionToTarget.normalized  * bulletSpeed;
+            // Add the linear bullet movement script
+            LinearBulletMovement bulletMovement = newBullet.AddComponent<LinearBulletMovement>();
+            bulletMovement.Initialize(startPoint, endPoint, bulletSpeed);
 
             Destroy(newBullet, 1f);
         }
+
+
         else
         {
             Debug.LogError("Missing bullet prefab or no valid hit point");
@@ -844,16 +893,25 @@ public class PlayerController : NetworkBehaviour
 
     void WeaponSway()
     {
-        if (playerMoveState == PlayerMoveState.RUN_LEFT){
+        // make sure bulletspawnpoint does not move
+
+        if (playerMoveState == PlayerMoveState.RUN_LEFT)
+        {
             // lerp weapon to the left
             weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0.03f, 0, 0), Time.deltaTime * 5f);
-        } else if (playerMoveState == PlayerMoveState.RUN_RIGHT){
+        }
+        else if (playerMoveState == PlayerMoveState.RUN_RIGHT)
+        {
             // lerp weapon to the right
             weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(-0.03f, 0, 0), Time.deltaTime * 5f);
-        } else if (playerMoveState == PlayerMoveState.RUN_FORWARD){
+        }
+        else if (playerMoveState == PlayerMoveState.RUN_FORWARD)
+        {
             // lerp weapon to the front
             weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -0.03f), Time.deltaTime * 5f);
-        } else {
+        }
+        else
+        {
             // lerp weapon to the center
             weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, 0), Time.deltaTime * 5f);
         }

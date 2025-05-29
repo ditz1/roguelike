@@ -116,6 +116,8 @@ namespace HelloWorld
                 }
                 else
                 {
+                    connect_screen.SetActive(false);
+                    lobby_canvas.SetActive(true);
                     Debug.Log("No friends are currently in-game.");
                 }
 
