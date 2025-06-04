@@ -5,19 +5,27 @@ public class EnemyWalker : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     EnemyController enemyController;
     public Transform the_shrine;
+    Animator animator;
+    public Transform target;
 
-    float walker_range = 2.5f;
+    float walker_range = 4.5f;
     float player_in_range_timer = 0f; // how long the player has been in range
     float player_in_range_duration = 1.5f; // duration before attacking player
+    float attack_range = 2.5f;
 
     float shrine_in_range_timer = 0f; // how long the shrine has been in range
-    float shrine_in_range_duration = 1.5f; // duration before attacking shrine
+    float shrine_in_range_duration = 2.5f; // duration before attacking shrine
     void Start()
     {
         enemyController = GetComponent<EnemyController>();
         if (enemyController == null)
         {
             Debug.LogError("No EnemyController component found on this GameObject!");
+        }
+        animator = transform.Find("zomb").GetComponent<Animator>();
+        if (animator == null)
+        {
+            Debug.LogError("No Animator component found on this GameObject!");
         }
 
     }
@@ -41,7 +49,7 @@ public class EnemyWalker : MonoBehaviour
         if (the_shrine != null)
         {
             Vector3 direction = the_shrine.position - transform.position;
-            if (direction.magnitude < walker_range)
+            if (direction.magnitude < attack_range)
             {
                 shrine_in_range_timer += Time.deltaTime;
 
@@ -51,6 +59,8 @@ public class EnemyWalker : MonoBehaviour
                     Shrine shrine = shrine_canvas.GetComponent<Shrine>();
                     if (shrine != null)
                     {
+                        if (animator != null) { animator.Play("zombatk"); }
+
                         shrine.DamageShrine(10); // Deal 10 damage to the player
                         Debug.Log("Enemy attacked the shrine!");
                     }
@@ -70,7 +80,7 @@ public class EnemyWalker : MonoBehaviour
         if (p_transform != null)
         {
             Vector3 direction = p_transform.position - transform.position;
-            if (direction.magnitude < walker_range)
+            if (direction.magnitude < attack_range)
             {
                 player_in_range_timer += Time.deltaTime;
 
@@ -79,6 +89,7 @@ public class EnemyWalker : MonoBehaviour
                     PlayerController playerController = p_transform.GetComponent<PlayerController>();
                     if (playerController != null)
                     {
+                        if (animator != null) { animator.Play("zombatk"); }
                         playerController.DamagePlayer(10); // Deal 10 damage to the player
                         Debug.Log("Enemy attacked the player!");
                     }
@@ -99,7 +110,16 @@ public class EnemyWalker : MonoBehaviour
     {
         if (the_shrine != null)
         {
-            Vector3 direction = the_shrine.position - transform.position;
+            // if distance is very close to player, walk towards player instead of shrine
+            Transform p_transform = enemyController.player;
+            if (p_transform != null && Vector3.Distance(transform.position, p_transform.position) < walker_range)
+            {
+                 target = p_transform; // Set the shrine to the player transform
+                 Debug.Log("Enemy is close to player, walking towards player instead of shrine.");
+            } else {
+                target = the_shrine;
+            }
+            Vector3 direction = target.position - transform.position;
             direction.y = 0; // Keep the movement on the horizontal plane
             if (direction.magnitude > 0.1f) // Check if the enemy is not already at the shrine
             {

@@ -9,12 +9,17 @@ public class EnemyController : MonoBehaviour
     private Renderer rend; // Reference to the renderer component
     public Image hp_img;
     public Transform player;
+    Transform shrine;
+    float walker_aggro_range = 4.5f; // Range at which the enemy will start walking towards the player or shrine
+    [SerializeField] GameObject canvas;
 
     void Start()
     {
         e_health = e_max_health; // Initialize enemy health
         // Get the renderer component
         player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
+        shrine = GameObject.FindGameObjectWithTag("Shrine")?.transform; // Find the shrine object by tag
+
         if (player == null)
         {
             Debug.LogError("Player not found! Make sure the player has the 'Player' tag.");
@@ -39,13 +44,17 @@ public class EnemyController : MonoBehaviour
     {
         if (player != null)
         {
-            //UpdateEnemy();
+            
             UpdateHealthBar();
             UpdateEnemyRotation();
         }
         else
         {
-           player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
+            player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
+            if (shrine == null)
+            {
+                shrine = GameObject.FindGameObjectWithTag("Shrine")?.transform; // Find the shrine object by tag
+            }
         }
         
     }
@@ -68,12 +77,16 @@ public class EnemyController : MonoBehaviour
     // update enemy to face towards player
     void UpdateEnemyRotation()
     {
-        if (player != null)
+        Transform target = player;
+        if (Vector3.Distance(transform.position, player.position) > walker_aggro_range)
         {
-            Vector3 direction = player.position - transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate towards the player
+            target = shrine;
         }
+        
+        Vector3 direction = target.position - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate towards the player
+        
     }
 
     void UpdateHealthBar()
@@ -81,6 +94,10 @@ public class EnemyController : MonoBehaviour
         // Update health bar logic here if needed
         float hp_as_scale = (float)e_health / e_max_health;
         hp_img.transform.localScale = new Vector3(hp_as_scale, 1.0f, 1.0f); // Update the scale of the health bar image
+
+        Vector3 direction = player.position - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+        canvas.transform.rotation = Quaternion.Slerp(canvas.transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate the canvas to face the player
         
     }
 

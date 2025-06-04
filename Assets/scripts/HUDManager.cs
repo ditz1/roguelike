@@ -63,13 +63,15 @@ public class HUDManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Cant ready up!");
+            //Debug.Log("Cant ready up!");
         }
         if (hud_found)
         {
             UpdateAmmoText(player.curr_ammo_in_mag, player.ammo_reserve);
             health.text = player.player_hp.ToString() + "%";            
-            weapon.text = player.weapon.name.Replace("w_", "").Replace("(Clone)", "");
+            if (weapon != null){
+                weapon.text = player.weapon.name.Replace("w_", "").Replace("(Clone)", "");
+            }
         }
     }
 
