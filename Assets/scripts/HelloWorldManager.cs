@@ -11,8 +11,11 @@ namespace HelloWorld
 {
     public class HelloWorldManager : MonoBehaviour
     {
-        public GameObject lobby_canvas;
-        public GameObject connect_screen;
+        [SerializeField] GameObject lobby_canvas;
+        [SerializeField] GameObject connect_screen;
+
+        [SerializeField] GameObject hud_canvas;
+
         private NetworkManager m_NetworkManager;
 
         public List<Tuple<CSteamID, string>> friendsList = new List<Tuple<CSteamID, string>>();
@@ -27,6 +30,7 @@ namespace HelloWorld
             m_NetworkManager = GetComponent<NetworkManager>();
             lobby_canvas.SetActive(true);
             connect_screen.SetActive(false);
+            hud_canvas.SetActive(false);
             chosen_host_name = "none"; // reset the chosen host name
             chosen_host = new CSteamID(0);
             // this could probably break if player resets lobby
@@ -58,6 +62,7 @@ namespace HelloWorld
                 m_NetworkManager.StartHost();
                 SteamFriends.SetRichPresence("status", "Hosting");
                 lobby_canvas.SetActive(false);
+                hud_canvas.SetActive(true);
             }
             else
             {
@@ -74,6 +79,7 @@ namespace HelloWorld
                 chosen_host = friendsList.Find(friend => friend.Item2 == chosen_host_name).Item1;
                 ConnectToHost(chosen_host);
                 connect_screen.SetActive(false);
+                hud_canvas.SetActive(true);
                 chosen_host_name = "none"; // reset the chosen host name after connecting
             }
            

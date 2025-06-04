@@ -66,6 +66,8 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.43f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\scripts\HUDManager.cs" />
+    <Compile Include="Assets\scripts\Helpers.cs" />
     <Compile Include="Assets\scripts\Steamworks.NET\SteamManager.cs" />
     <Compile Include="Assets\scripts\EnemyController.cs" />
     <Compile Include="Assets\scripts\BootstrapTransport.cs" />
@@ -77,7 +79,10 @@
     <Compile Include="Assets\scripts\CheckpointLogic.cs" />
     <Compile Include="Assets\scripts\PlayerAnimator.cs" />
     <Compile Include="Assets\scripts\LinearBulletMovement.cs" />
+    <Compile Include="Assets\scripts\ZombSpawner.cs" />
     <Compile Include="Assets\scripts\EnemySpawner.cs" />
+    <Compile Include="Assets\scripts\EnemyWalker.cs" />
+    <Compile Include="Assets\scripts\GameManager.cs" />
     <Compile Include="Assets\scripts\EnemyBomber.cs" />
     <Compile Include="Assets\scripts\ClientNetworkTransform.cs" />
     <Compile Include="Assets\scripts\CheckpointManager.cs" />

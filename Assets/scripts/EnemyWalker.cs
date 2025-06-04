@@ -1,0 +1,88 @@
+using UnityEngine;
+
+public class EnemyWalker : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    EnemyController enemyController;
+    public Transform the_shrine;
+
+    float walker_range = 2.5f;
+    float player_in_range_timer = 0f; // how long the player has been in range
+    float player_in_range_duration = 1.5f; // duration before attacking player
+    void Start()
+    {
+        enemyController = GetComponent<EnemyController>();
+        if (enemyController == null)
+        {
+            Debug.LogError("No EnemyController component found on this GameObject!");
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        WalkToShrine();
+        if (enemyController.e_health <= 0)
+        {
+            Vector3 direction = transform.forward; // Get the current forward direction of the enemy
+            Quaternion rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 0, 180); // Rotate 90 degrees
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate to the new direction
+            Destroy(gameObject, 2f); // Destroy the enemy after 2 seconds
+        }
+        Attack();
+    }
+
+    void Attack()
+    {
+        Transform p_transform = enemyController.player;
+        // if distance from player is less than 2.5f, attack
+        if (p_transform != null)
+        {
+            Vector3 direction = p_transform.position - transform.position;
+            if (direction.magnitude < walker_range)
+            {
+                player_in_range_timer += Time.deltaTime;
+
+                if (player_in_range_timer >= player_in_range_duration)
+                {
+                    PlayerController playerController = p_transform.GetComponent<PlayerController>();
+                    if (playerController != null)
+                    {
+                        playerController.DamagePlayer(10); // Deal 10 damage to the player
+                        Debug.Log("Enemy attacked the player!");
+                    }
+                    else
+                    {
+                        Debug.LogError("PlayerController component not found on the player!");
+                    }
+                    player_in_range_timer = 0f;
+                }
+            }
+        }
+    }
+
+    void WalkToShrine()
+    {
+        if (the_shrine != null)
+        {
+            Vector3 direction = the_shrine.position - transform.position;
+            direction.y = 0; // Keep the movement on the horizontal plane
+            if (direction.magnitude > 0.1f) // Check if the enemy is not already at the shrine
+            {
+                transform.position += direction.normalized * Time.deltaTime * 2f; // Move towards the shrine
+            }
+        }
+        else
+        {
+            the_shrine = GameObject.FindGameObjectWithTag("Shrine")?.transform; // Find the shrine by tag
+            Debug.LogError("The shrine is not assigned!");
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, walker_range);
+    }
+}

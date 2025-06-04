@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CheckpointManager
   - MaskToPlayer
+  - Shrine
+  - Zomb
   layers:
   - Default
   - TransparentFX

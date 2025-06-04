@@ -3,7 +3,8 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour
 {
-    int e_health = 200;
+    int e_max_health = 60;
+    public int e_health = 60;
     Color e_color = Color.blue;
     private Renderer rend; // Reference to the renderer component
     public Image hp_img;
@@ -11,6 +12,7 @@ public class EnemyController : MonoBehaviour
 
     void Start()
     {
+        e_health = e_max_health; // Initialize enemy health
         // Get the renderer component
         player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
         if (player == null)
@@ -37,9 +39,13 @@ public class EnemyController : MonoBehaviour
     {
         if (player != null)
         {
-            UpdateEnemy();
+            //UpdateEnemy();
             UpdateHealthBar();
             UpdateEnemyRotation();
+        }
+        else
+        {
+           player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player object by tag
         }
         
     }
@@ -55,7 +61,7 @@ public class EnemyController : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction) * Quaternion.Euler(0, 0, 180); // Rotate 90 degrees
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate to the new direction
             rend.material.color = Color.red; // Change color to red
-            Destroy(gameObject, 1f); // Uncomment this line if you want to destroy the enemy after 2 seconds
+            Destroy(gameObject, 1f);
         }
     }
 
@@ -73,7 +79,7 @@ public class EnemyController : MonoBehaviour
     void UpdateHealthBar()
     {
         // Update health bar logic here if needed
-        float hp_as_scale = (float)e_health / 200f;
+        float hp_as_scale = (float)e_health / e_max_health;
         hp_img.transform.localScale = new Vector3(hp_as_scale, 1.0f, 1.0f); // Update the scale of the health bar image
         
     }

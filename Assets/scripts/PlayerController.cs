@@ -2,11 +2,14 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using Unity.Netcode;
+using System.Collections;
 
 public class PlayerController : NetworkBehaviour
 {
     Rigidbody rb;
-    GameObject weapon;
+    public GameObject weapon;
+
+    public string player_name = "DitzTest";
     GameObject weapon_container;
     GameObject external_view_weapon;
     Ray player_look;
@@ -58,6 +61,17 @@ public class PlayerController : NetworkBehaviour
     Transform default_lh_transform;
 
     bool weapon_equipped = false;
+
+    // this is pretty terrible, should really have a weapon object and then have .Shoot() but 
+    // for now i guess we can do this, isn't really the main focus of the game
+
+    public int ammo_reserve = 0; // total ammo player has not in gun
+    public int curr_ammo_in_mag = 0; // current ammo in magazine
+    public int mag_capacity = 0; // how much the mag can hold on reload
+
+    public int player_hp = 100;
+
+
 
     public enum PlayerMoveState
     {
@@ -209,7 +223,7 @@ public class PlayerController : NetworkBehaviour
             return;
         }
 
-        Debug.Log("Masking object " + obj.name + " to layer " + layerName + " (index: " + layerIndex + ")");
+        //Debug.Log("Masking object " + obj.name + " to layer " + layerName + " (index: " + layerIndex + ")");
         obj.layer = layerIndex;
 
         foreach (Transform child in obj.transform)
@@ -279,7 +293,7 @@ public class PlayerController : NetworkBehaviour
             // Shoot with rate limiting
             if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
             {
-                if (!isReloading)
+                if (!isReloading && curr_ammo_in_mag > 0)
                 {
                     nextFireTime = Time.time + fireRate; // Set next allowed fire time
                     FireBullet();
@@ -525,39 +539,47 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    void LoadWeapon(){
+    void LoadWeapon()
+    {
         AssignDefaultViewmodel(); // assign initial offset inside weapon container for different weapons
         GameObject localModel = null;
-        foreach (Transform child in transform) {
-            if (child.name == "model") {
+        foreach (Transform child in transform)
+        {
+            if (child.name == "model")
+            {
                 localModel = child.gameObject;
                 break;
             }
         }
-        
 
-        if (localModel == null) {
+
+        if (localModel == null)
+        {
             Debug.LogWarning("Can't cull local model correctly!");
             return;
         }
 
-        
+
 
         // make a copy of weapon for external view
         external_view_weapon = Instantiate(weapon, new Vector3(0, 0, 0), weapon.transform.rotation);
         external_view_weapon.transform.parent = GameObject.Find("model").transform;
-        
-        if (IsOwner){
+
+        if (IsOwner)
+        {
             MaskObjectToLayer(localModel, "MaskToPlayer");
             MaskObjectToLayer(external_view_weapon, "MaskToPlayer");
             MaskObjectToLayer(weapon, "FirstPersonOnly");
-        } else {
+        }
+        else
+        {
             MaskObjectToLayer(localModel, "Default");
             MaskObjectToLayer(external_view_weapon, "Default");
             MaskObjectToLayer(weapon, "Ignore");
         }
 
-        if (weapon == null) {
+        if (weapon == null)
+        {
             Debug.LogWarning("No weapon found, cannot load weapon.");
             return;
         }
@@ -590,10 +612,10 @@ public class PlayerController : NetworkBehaviour
         {
             Debug.LogWarning("Weapon magazine not found!");
         }
-        
+
         right_hand = FindChildInObject(gameObject, "RightHandGrab");
         left_hand = FindChildInObject(gameObject, "LeftHandGrab");
-        
+
 
         Debug.Log("Initialization results: " +
                  "weapon=" + (weapon != null) + ", " +
@@ -607,24 +629,49 @@ public class PlayerController : NetworkBehaviour
         // set weapon to be a child of the weapon container
         weapon.transform.parent = weapon_container.transform;
 
+        if (weapon.name.Contains("ak"))
+        {
+            mag_capacity = 30;
+            ammo_reserve = 90;
+            fireRate = 0.1f;
+        }
+        else if (weapon.name.Contains("m4a1"))
+        {
+            mag_capacity = 30;
+            ammo_reserve = 90;
+            fireRate = 0.075f;
+        }
+        else if (weapon.name.Contains("vector"))
+        {
+            mag_capacity = 25;
+            ammo_reserve = 75;
+            fireRate = 0.04f;
+        }
+
+        curr_ammo_in_mag = mag_capacity;
+
     }
     void WeaponRecoil()
     {
         float recoilAmount = 0.5f; // defaults 
-        float recoilSpeed = 12f; 
-        
+        float recoilSpeed = 12f;
+
         // heavier firing should have high recoil_amt, lower recoil_speed
         // lighter firing should have low recoil_amt, higher recoil_speed
-
-        if (weapon.name.Contains("ak")){
-            recoilAmount = 0.7f;
-            recoilSpeed = 8f;
-        } else if (weapon.name.Contains("m4a1")){
+        if (weapon.name.Contains("ak"))
+        {
+            recoilAmount = 1.2f;
+            recoilSpeed = 6f;
+        }
+        else if (weapon.name.Contains("m4a1"))
+        {
             recoilAmount = 0.3f;
-            recoilSpeed = 15f;
-        } else if (weapon.name.Contains("vector")){
+            recoilSpeed = 10f;
+        }
+        else if (weapon.name.Contains("vector"))
+        {
             recoilAmount = 0.2f;
-            recoilSpeed = 20f;
+            recoilSpeed = 15f;
         }
 
         weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -1f * recoilAmount), Time.deltaTime * recoilSpeed);
@@ -632,6 +679,7 @@ public class PlayerController : NetworkBehaviour
 
     void ReloadWeapon()
     {
+
         if (weaponMagazine == null)
         {
             isReloading = false;
@@ -745,6 +793,16 @@ public class PlayerController : NetworkBehaviour
                 if (Vector3.Distance(weaponMagazine.transform.localPosition, magazineOriginalPosition) < 0.1f)
                 {
                     mag_in_place = true;
+
+                    if (ammo_reserve > 0)
+                    {
+                        int ammo_needed = mag_capacity - curr_ammo_in_mag; 
+                        int ammo_to_take = Mathf.Min(ammo_needed, ammo_reserve);
+
+                        curr_ammo_in_mag += ammo_to_take;
+                        ammo_reserve -= ammo_to_take;
+                    }
+
                     weaponMagazine.transform.localPosition = magazineOriginalPosition;
                     weaponMagazine.transform.localRotation = magazineOriginalRotation;
                 }
@@ -785,6 +843,8 @@ public class PlayerController : NetworkBehaviour
             Vector3 endPoint;
             bool hit = Physics.Raycast(fireOrigin, fireDirection, out contact, 100);
             muzzleFlash?.Play(); // Play muzzle flash effect if available
+            curr_ammo_in_mag--;
+            
 
             if (hit && contact.collider != null)
             {
@@ -792,7 +852,7 @@ public class PlayerController : NetworkBehaviour
                 EnemyController enemy = contact.collider.GetComponent<EnemyController>();
                 if (enemy != null)
                 {
-                    enemy.TakeDamage(10);
+                    enemy.TakeDamage(20);
                 }
                 endPoint = contact.point;
             }
@@ -889,6 +949,16 @@ public class PlayerController : NetworkBehaviour
                              (weapon_rh_pos == null ? "weapon_rh_pos is null; " : "") +
                              (weapon_lh_pos == null ? "weapon_lh_pos is null; " : ""));
         }
+    }
+
+    public void DamagePlayer(int damage)
+    {
+        player_hp -= damage;
+        if (player_hp <= 0)
+        {
+            player_hp = 0;
+        }
+        Debug.Log("Player took " + damage + " damage!");
     }
 
     void WeaponSway()
