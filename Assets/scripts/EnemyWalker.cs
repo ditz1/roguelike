@@ -9,6 +9,9 @@ public class EnemyWalker : MonoBehaviour
     float walker_range = 2.5f;
     float player_in_range_timer = 0f; // how long the player has been in range
     float player_in_range_duration = 1.5f; // duration before attacking player
+
+    float shrine_in_range_timer = 0f; // how long the shrine has been in range
+    float shrine_in_range_duration = 1.5f; // duration before attacking shrine
     void Start()
     {
         enemyController = GetComponent<EnemyController>();
@@ -35,6 +38,33 @@ public class EnemyWalker : MonoBehaviour
 
     void Attack()
     {
+        if (the_shrine != null)
+        {
+            Vector3 direction = the_shrine.position - transform.position;
+            if (direction.magnitude < walker_range)
+            {
+                shrine_in_range_timer += Time.deltaTime;
+
+                if (shrine_in_range_timer >= shrine_in_range_duration)
+                {
+                    GameObject shrine_canvas = the_shrine.Find("Healthbar").gameObject;
+                    Shrine shrine = shrine_canvas.GetComponent<Shrine>();
+                    if (shrine != null)
+                    {
+                        shrine.DamageShrine(10); // Deal 10 damage to the player
+                        Debug.Log("Enemy attacked the shrine!");
+                    }
+                    else
+                    {
+                        Debug.LogError("Shrine null!");
+                    }
+                    shrine_in_range_timer = 0f;
+                }
+            } else {
+                shrine_in_range_timer = 0f;                
+            }
+        }
+
         Transform p_transform = enemyController.player;
         // if distance from player is less than 2.5f, attack
         if (p_transform != null)
@@ -58,7 +88,10 @@ public class EnemyWalker : MonoBehaviour
                     }
                     player_in_range_timer = 0f;
                 }
+            } else {
+                player_in_range_timer = 0f;
             }
+
         }
     }
 

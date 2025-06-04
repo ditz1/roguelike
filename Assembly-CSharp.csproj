@@ -79,6 +79,7 @@
     <Compile Include="Assets\scripts\CheckpointLogic.cs" />
     <Compile Include="Assets\scripts\PlayerAnimator.cs" />
     <Compile Include="Assets\scripts\LinearBulletMovement.cs" />
+    <Compile Include="Assets\scripts\Shrine.cs" />
     <Compile Include="Assets\scripts\ZombSpawner.cs" />
     <Compile Include="Assets\scripts\EnemySpawner.cs" />
     <Compile Include="Assets\scripts\EnemyWalker.cs" />
