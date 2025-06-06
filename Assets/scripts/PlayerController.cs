@@ -3,6 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerController : NetworkBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerController : NetworkBehaviour
     RaycastHit contact;
     Camera cam;
     public GameObject bullet;
+
+    [SerializeField] List<GameObject> stuctures; 
 
     ParticleSystem muzzleFlash;
     NetworkManager networkManager;
@@ -70,6 +73,12 @@ public class PlayerController : NetworkBehaviour
     public int mag_capacity = 0; // how much the mag can hold on reload
 
     public int player_hp = 100;
+
+    public int player_cash = 0;
+
+    bool build_mode = false;
+
+    int selected_stucture = 0;
 
 
 
@@ -244,12 +253,23 @@ public class PlayerController : NetworkBehaviour
         // MUST BE LOCAL POSITION
         // assign initial offset inside weapon container for different weapons
         Debug.Log("weapon name: " + weapon.name);
-        if (weapon.name.Contains("ak")){
+        build_mode = false;
+        if (weapon.name.Contains("ak"))
+        {
             weapon.transform.localPosition = new Vector3(0.021f, -0.04f, 0.0f);
-        } else if (weapon.name.Contains("m4a1")){
+        }
+        else if (weapon.name.Contains("m4a1"))
+        {
             weapon.transform.localPosition = new Vector3(0.08f, 0f, -0.06f);
-        } else if (weapon.name.Contains("vector")){
+        }
+        else if (weapon.name.Contains("vector"))
+        {
             weapon.transform.localPosition = new Vector3(-0.04f, 0.0f, -0.8f);
+        }
+        else if (weapon.name.Contains("build"))
+        {
+            build_mode = true;
+            weapon.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
         }
     }
 
@@ -293,14 +313,19 @@ public class PlayerController : NetworkBehaviour
             // Shoot with rate limiting
             if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
             {
-                if (!isReloading && curr_ammo_in_mag > 0)
+                if (build_mode)
+                {
+                    PlaceStructure();
+                    
+                }
+                else if (!isReloading && curr_ammo_in_mag > 0)
                 {
                     nextFireTime = Time.time + fireRate; // Set next allowed fire time
                     FireBullet();
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.R) && !isReloading)
+            if (Input.GetKeyDown(KeyCode.R) && !isReloading && !build_mode)
             {
                 isReloading = true;
             }
@@ -329,6 +354,13 @@ public class PlayerController : NetworkBehaviour
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+    }
+
+    void PlaceStructure()
+    {
+        // raycast from camera to find a valid position
+        RaycastHit hit;
+        // TODO:
     }
 
     void Move() 
@@ -853,6 +885,8 @@ public class PlayerController : NetworkBehaviour
                 if (enemy != null)
                 {
                     enemy.TakeDamage(20);
+                    // also give cash to player for hitting enemy
+                    player_cash += 10;
                 }
                 endPoint = contact.point;
             }

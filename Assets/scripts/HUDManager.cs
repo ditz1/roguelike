@@ -14,6 +14,7 @@ public class HUDManager : MonoBehaviour
     TextMeshProUGUI ammo;
     TextMeshProUGUI weapon;
     TextMeshProUGUI health;
+    TextMeshProUGUI cash;
     bool game_started = false;
     bool round_text_updated = false;
     int current_round = -1;
@@ -68,9 +69,14 @@ public class HUDManager : MonoBehaviour
         if (hud_found)
         {
             UpdateAmmoText(player.curr_ammo_in_mag, player.ammo_reserve);
-            health.text = player.player_hp.ToString() + "%";            
-            if (weapon != null){
+            health.text = player.player_hp.ToString() + "%";
+            if (weapon != null)
+            {
                 weapon.text = player.weapon.name.Replace("w_", "").Replace("(Clone)", "");
+            }
+            if (cash != null)
+            {
+                cash.text = "Cash: " + player.player_cash.ToString();
             }
         }
     }
@@ -137,6 +143,17 @@ public class HUDManager : MonoBehaviour
             {
                 health.text = "Health: 100%";
             }
+
+            cash = parent_hud.transform.Find("cash")?.GetComponent<TextMeshProUGUI>();
+            if (cash == null)
+            {
+                Debug.LogError("Cash Text not found!");
+            }
+            else
+            {
+                cash.text = "Cash: 0";
+            }
+
         }
         hud_found = true;
     }
