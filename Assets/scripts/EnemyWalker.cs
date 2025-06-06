@@ -15,6 +15,11 @@ public class EnemyWalker : MonoBehaviour
 
     float shrine_in_range_timer = 0f; // how long the shrine has been in range
     float shrine_in_range_duration = 2.5f; // duration before attacking shrine
+
+    float barrier_atk_timer = 2.4f;
+
+    bool isAttacking = false; // Flag to prevent multiple attacks at the same time
+
     void Start()
     {
         enemyController = GetComponent<EnemyController>();
@@ -55,6 +60,7 @@ public class EnemyWalker : MonoBehaviour
 
                 if (shrine_in_range_timer >= shrine_in_range_duration)
                 {
+                    
                     GameObject shrine_canvas = the_shrine.Find("Healthbar").gameObject;
                     Shrine shrine = shrine_canvas.GetComponent<Shrine>();
                     if (shrine != null)
@@ -70,8 +76,11 @@ public class EnemyWalker : MonoBehaviour
                     }
                     shrine_in_range_timer = 0f;
                 }
-            } else {
-                shrine_in_range_timer = 0f;                
+            }
+            else
+            {
+                shrine_in_range_timer = 0f;
+                
             }
         }
 
@@ -86,6 +95,7 @@ public class EnemyWalker : MonoBehaviour
 
                 if (player_in_range_timer >= player_in_range_duration)
                 {
+                    
                     PlayerController playerController = p_transform.GetComponent<PlayerController>();
                     if (playerController != null)
                     {
@@ -99,29 +109,40 @@ public class EnemyWalker : MonoBehaviour
                     }
                     player_in_range_timer = 0f;
                 }
-            } else {
-                player_in_range_timer = 0f;
             }
-
+            else
+            {
+                player_in_range_timer = 0f;
+                
+            }
         }
+        
     }
 
     void WalkToShrine()
     {
+        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.IsName("zombatk"))
+        {
+            return;
+        }
+        
         if (the_shrine != null)
         {
             // if distance is very close to player, walk towards player instead of shrine
             Transform p_transform = enemyController.player;
             if (p_transform != null && Vector3.Distance(transform.position, p_transform.position) < walker_range)
             {
-                 target = p_transform; // Set the shrine to the player transform
-                 Debug.Log("Enemy is close to player, walking towards player instead of shrine.");
-            } else {
+                target = p_transform; // Set the shrine to the player transform
+                Debug.Log("Enemy is close to player, walking towards player instead of shrine.");
+            }
+            else
+            {
                 target = the_shrine;
             }
             Vector3 direction = target.position - transform.position;
             direction.y = 0; // Keep the movement on the horizontal plane
-            if (direction.magnitude > 0.1f) // Check if the enemy is not already at the shrine
+            if (direction.magnitude > 0.5f) // Check if the enemy is not already at the shrine
             {
                 transform.position += direction.normalized * Time.deltaTime * 2f; // Move towards the shrine
             }
@@ -132,6 +153,52 @@ public class EnemyWalker : MonoBehaviour
             Debug.LogError("The shrine is not assigned!");
         }
     }
+
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     if (other.CompareTag("Barrier"))
+    //     {
+    //         Debug.Log("other: " + other.gameObject.name);
+    //         Debug.Log("colliding with barrier");
+    //         BarrierControl barrier = other.GetComponent<BarrierControl>();
+    //         if (barrier != null)
+    //         {
+    //             if (animator != null) { animator.Play("zombatk"); }
+    //             barrier.DamageBarrier(); // Deal 10 damage to the barrier
+    //             Debug.Log("Enemy damaged the barrier!");
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("BarrierControl component not found on the barrier!");
+    //         }
+    //     }
+    // }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Barrier") && !isAttacking)
+        {
+            barrier_atk_timer += Time.deltaTime;
+
+            if (barrier_atk_timer >= 2.5f)
+            {
+                isAttacking = true;
+                Debug.Log("other: " + other.gameObject.name);
+                Debug.Log("staying with barrier");
+                BarrierControl barrier = other.GetComponent<BarrierControl>();
+                if (barrier != null)
+                {
+                    if (animator != null) { animator.Play("zombatk"); }
+                    barrier.DamageBarrier();
+                    Debug.Log("Enemy damaged the barrier!");
+                }
+                barrier_atk_timer = 0f;
+                isAttacking = false;
+            }
+        }
+    }
+
+    
 
     void OnDrawGizmos()
     {

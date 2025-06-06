@@ -8,6 +8,7 @@ TagManager:
   - MaskToPlayer
   - Shrine
   - Zomb
+  - Barrier
   layers:
   - Default
   - TransparentFX

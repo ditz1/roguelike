@@ -85,6 +85,8 @@ public class EnemyController : MonoBehaviour
         
         Vector3 direction = target.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(direction);
+        rotation.x = 0;
+        rotation.z = 0;
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f); // Smoothly rotate towards the player
         
     }
