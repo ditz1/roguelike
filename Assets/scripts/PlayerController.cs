@@ -12,6 +12,8 @@ public class PlayerController : NetworkBehaviour
 
     public string player_name = "DitzTest";
     GameObject weapon_container;
+
+    [SerializeField] GameObject weapon_build;
     GameObject external_view_weapon;
     Ray player_look;
     RaycastHit contact;
@@ -74,11 +76,19 @@ public class PlayerController : NetworkBehaviour
 
     public int player_hp = 100;
 
-    public int player_cash = 0;
+    public int player_cash = 1000;
 
     bool build_mode = false;
 
     int selected_stucture = 0;
+
+    int selected_weapon = 0;
+
+    [SerializeField] Material previewMaterial; // Assign your transparent material in inspector
+    private GameObject previewStructure; // The preview object that follows the raycast
+    private Material[] originalMaterials; // Store original materials to restore them
+
+    float placement_y_rotation = 0.0f;
 
 
 
@@ -109,6 +119,7 @@ public class PlayerController : NetworkBehaviour
     
     void Start()
     {
+        player_cash = 1000; // starting cash
                 
         // this is just needed for debugging
         if (Display.displays.Length > 1)
@@ -128,6 +139,7 @@ public class PlayerController : NetworkBehaviour
             AssignDefaultViewmodel();
         }
 
+        weapon_build.SetActive(false);
         
 
         //external_view_weapon.localScale = new Vector3(1, 1, 1);
@@ -269,7 +281,7 @@ public class PlayerController : NetworkBehaviour
         else if (weapon.name.Contains("build"))
         {
             build_mode = true;
-            weapon.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
+            //weapon.transform.localPosition = new Vector3(0.0f, 0.0f, -0.5f);
         }
     }
 
@@ -297,6 +309,58 @@ public class PlayerController : NetworkBehaviour
         player_look.origin = cam.transform.position;
         player_look.direction = cam.transform.forward;
 
+        if (build_mode)
+        {
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                selected_stucture = (selected_stucture + 1) % stuctures.Count;
+                Debug.Log("Selected structure: " + stuctures[selected_stucture].name);
+                UpdatePreviewStructure(); // Update preview when structure changes
+            }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                selected_stucture = (selected_stucture - 1 + stuctures.Count) % stuctures.Count;
+                Debug.Log("Selected structure: " + stuctures[selected_stucture].name);
+                UpdatePreviewStructure(); // Update preview when structure changes
+            }
+
+            // Update preview position every frame
+            UpdatePreviewPosition();
+
+            if (Input.GetKey(KeyCode.Z))
+            {
+                placement_y_rotation += 0.3f; // rotate preview structure around Y axis
+            } else if (Input.GetKey(KeyCode.C))
+            {
+                placement_y_rotation -= 0.3f; // rotate preview structure around Y axis
+            }
+
+            if (Input.GetMouseButtonDown(0)) // m1
+            {
+                // check if player has funds
+                int old_player_cash = player_cash;
+                switch (selected_stucture)
+                {
+                    case 0:
+                        player_cash -= 20;
+                        break;
+                    case 1:
+                        player_cash -= 50;
+                        break;
+                }
+                if (player_cash < 0)
+                {
+                    player_cash = old_player_cash; // revert to old cash amount
+                    Debug.Log("Not enough cash to place structure!");
+                    return;
+                }
+                else
+                {
+                    PlaceStructure();
+                }
+            }
+        }
+
         if (weapon_equipped)
         {
             AdjustWeaponPosition();
@@ -311,14 +375,9 @@ public class PlayerController : NetworkBehaviour
             }
 
             // Shoot with rate limiting
-            if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // m1
+            if (Input.GetMouseButton(0) && Time.time >= nextFireTime && !build_mode) // m1
             {
-                if (build_mode)
-                {
-                    PlaceStructure();
-                    
-                }
-                else if (!isReloading && curr_ammo_in_mag > 0)
+                if (!isReloading && curr_ammo_in_mag > 0)
                 {
                     nextFireTime = Time.time + fireRate; // Set next allowed fire time
                     FireBullet();
@@ -333,6 +392,17 @@ public class PlayerController : NetworkBehaviour
             if (isReloading)
             {
                 ReloadWeapon();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                SwapWeapon(0);
+                AdjustFirstPersonHandsPosition();
+            }
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                SwapWeapon(1);
+                AdjustFirstPersonHandsPosition();
             }
         }
         else
@@ -356,11 +426,189 @@ public class PlayerController : NetworkBehaviour
         cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
     }
 
+    void UpdatePreviewStructure()
+    {
+        // Destroy old preview if it exists
+        if (previewStructure != null)
+        {
+            Destroy(previewStructure);
+        }
+
+        // Create new preview structure
+        if (stuctures.Count > 0 && selected_stucture < stuctures.Count)
+        {
+            previewStructure = Instantiate(stuctures[selected_stucture]);
+
+            // Apply transparent material to all renderers in the preview
+            ApplyPreviewMaterial(previewStructure);
+
+            // Disable any colliders so the preview doesn't interfere with raycasting
+            Collider[] colliders = previewStructure.GetComponentsInChildren<Collider>();
+            foreach (Collider col in colliders)
+            {
+                col.enabled = false;
+            }
+        }
+    }
+
+    void ApplyPreviewMaterial(GameObject obj)
+    {
+        Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer renderer in renderers)
+        {
+            Material[] materials = new Material[renderer.materials.Length];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                materials[i] = previewMaterial;
+            }
+            renderer.materials = materials;
+        }
+    }
+
+    void UpdatePreviewPosition()
+    {
+        if (previewStructure == null) return;
+
+        RaycastHit struct_hit;
+        if (Physics.Raycast(player_look, out struct_hit, 100))
+        {
+            // Check if the hit surface is valid for placement
+            if (struct_hit.collider != null && struct_hit.collider.gameObject.layer == LayerMask.NameToLayer("Default"))
+            {
+                // Position the preview at the hit point
+                Vector3 placePosition = struct_hit.point;
+                placePosition.y += 0.0f; // Adjust height to avoid clipping into ground
+
+                previewStructure.transform.position = placePosition;
+                previewStructure.transform.rotation = Quaternion.Euler(0, placement_y_rotation, 0); // Set rotation based on user input
+
+                // Make preview visible
+                previewStructure.SetActive(true);
+            }
+            else
+            {
+                // Hide preview if surface is invalid
+                previewStructure.SetActive(false);
+            }
+        }
+        else
+        {
+            // Hide preview if no surface hit
+            previewStructure.SetActive(false);
+        }
+    }
+
     void PlaceStructure()
     {
-        // raycast from camera to find a valid position
-        RaycastHit hit;
-        // TODO:
+        if (previewStructure == null || !previewStructure.activeInHierarchy) return;
+
+        // Create the actual structure at the preview position
+        GameObject actualStructure = Instantiate(stuctures[selected_stucture],
+                                               previewStructure.transform.position,
+                                               previewStructure.transform.rotation);
+
+        Debug.Log("Placed structure: " + actualStructure.name + " at position " + actualStructure.transform.position);
+        
+    }
+
+    void SwapWeapon(int w)
+    {
+        switch (w)
+        {
+            case 0:
+                if (weapon != null)
+                {
+                    weapon_build.SetActive(false);
+                    weapon.SetActive(true);
+                    AssignDefaultViewmodel();
+                    build_mode = false;
+
+                    // Destroy preview when exiting build mode
+                    if (previewStructure != null)
+                    {
+                        Destroy(previewStructure);
+                        previewStructure = null;
+                    }
+                }
+                break;
+            case 1:
+                if (weapon_build != null)
+                {
+                    weapon_build.SetActive(true);
+                    weapon.SetActive(false);
+                    AssignDefaultViewmodel();
+                    build_mode = true;
+
+                    // Create initial preview structure
+                    UpdatePreviewStructure();
+                }
+                break;
+        }
+    }
+
+    void AdjustBuildModeHands()
+    {
+        if (first_person_lh != null && first_person_rh != null && weapon_build != null)
+        {
+            
+            
+            // Find grab positions on the weapon
+            GameObject leftGrabPos = FindChildInObject(weapon_build, "LHgrabpos");
+            GameObject rightGrabPos = FindChildInObject(weapon_build, "RHgrabpos");
+
+            if (leftGrabPos == null || rightGrabPos == null)
+            {
+                Debug.LogWarning("Could not find grab positions on weapon");
+                return;
+            }
+
+            // Find hand and arm transforms
+            GameObject leftHand = FindChildInObject(first_person_lh, "hand");
+            GameObject leftArm = FindChildInObject(first_person_lh, "arm");
+            GameObject rightHand = FindChildInObject(first_person_rh, "hand");
+            GameObject rightArm = FindChildInObject(first_person_rh, "arm");
+
+            if (leftHand == null || leftArm == null || rightHand == null || rightArm == null)
+            {
+                Debug.LogWarning("Could not find hand/arm children objects");
+                return;
+            }
+
+            // Get player center position
+            Vector3 playerCenter = cam.transform.position + Vector3.down * 0.5f;
+            // move playercenter a bit behind player
+            playerCenter -= transform.forward * 0.2f;
+            // and move player center a bit right
+            //playerCenter += transform.right * 0.2f;
+            Vector3 playerCenterLeft = playerCenter - transform.right * 0.3f;
+            Vector3 playerCenterRight = playerCenter + transform.right * 0.2f;
+
+            // Following the same approach as AdjustWeaponPosition:
+
+            // 1. Calculate position offsets (position hands at grab positions)
+            Vector3 leftPositionOffset = leftGrabPos.transform.position - leftHand.transform.position;
+            Vector3 rightPositionOffset = rightGrabPos.transform.position - rightHand.transform.position;
+
+            // 2. Calculate rotation alignments
+            // Get vectors representing the directions between parts
+            Vector3 playerToLeftGrab = (leftGrabPos.transform.position - playerCenterLeft).normalized;
+            Vector3 playerToRightGrab = (rightGrabPos.transform.position - playerCenterRight).normalized;
+
+            Vector3 armToHand = (leftHand.transform.position - leftArm.transform.position).normalized;
+            Vector3 armToHandRight = (rightHand.transform.position - rightArm.transform.position).normalized;
+
+            // Calculate rotation to align these directions
+            Quaternion leftAlignRotation = Quaternion.FromToRotation(armToHand, playerToLeftGrab);
+            Quaternion rightAlignRotation = Quaternion.FromToRotation(armToHandRight, playerToRightGrab);
+
+            // 3. Apply position and rotation to the hand objects
+            first_person_lh.transform.position += leftPositionOffset;
+            first_person_rh.transform.position += rightPositionOffset;
+
+            first_person_lh.transform.rotation = leftAlignRotation * first_person_lh.transform.rotation;
+            first_person_rh.transform.rotation = rightAlignRotation * first_person_rh.transform.rotation;
+        }
     }
 
     void Move() 
@@ -556,7 +804,7 @@ public class PlayerController : NetworkBehaviour
                 Debug.Log("Hit weapon: " + hitObject.name);
                 GameObject newWeapon = Instantiate(hitObject, weapon_container.transform.position, weapon_container.transform.rotation);
                 newWeapon.transform.SetParent(weapon_container.transform, false);
-                if (weapon != null)
+                if (weapon != null && !weapon.name.Contains("build"))
                 {
                     Destroy(weapon); // destroy old weapon
                     Destroy(external_view_weapon); // destroy old external view weapon
@@ -666,18 +914,21 @@ public class PlayerController : NetworkBehaviour
             mag_capacity = 30;
             ammo_reserve = 90;
             fireRate = 0.1f;
+            reloadTime = 0.8f;
         }
         else if (weapon.name.Contains("m4a1"))
         {
             mag_capacity = 30;
             ammo_reserve = 90;
             fireRate = 0.075f;
+            reloadTime = 0.65f;
         }
         else if (weapon.name.Contains("vector"))
         {
             mag_capacity = 25;
             ammo_reserve = 75;
             fireRate = 0.04f;
+            reloadTime = 0.45f;
         }
 
         curr_ammo_in_mag = mag_capacity;
@@ -1024,6 +1275,12 @@ public class PlayerController : NetworkBehaviour
 
     void AdjustFirstPersonHandsPosition()
     {
+        if (build_mode)
+        {
+            AdjustBuildModeHands();
+            return; // Skip further adjustments in build mode
+        }
+
         if (weapon != null && first_person_lh != null && first_person_rh != null)
         {
             // Find grab positions on the weapon
@@ -1090,7 +1347,7 @@ public class PlayerController : NetworkBehaviour
         }
         else
         {
-            Debug.LogWarning("First person weapon positioning failed because: " + 
+            Debug.LogWarning("First person weapon positioning failed because: " +
                             (weapon == null ? "weapon is null; " : "") +
                             (first_person_lh == null ? "first_person_lh is null; " : "") +
                             (first_person_rh == null ? "first_person_rh is null; " : ""));

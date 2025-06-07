@@ -6,6 +6,7 @@ public class Shrine : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     Transform player;
     [SerializeField] Image hp_img;
+    [SerializeField] Transform shrine_transform;
     int shrine_hp = 100; // Example initial health value for the shrine
 
     // Update is called once per frame
@@ -32,6 +33,8 @@ public class Shrine : MonoBehaviour
 
         float shrine_hp_percentage = shrine_hp / 100.0f; // Calculate the health percentage
         hp_img.transform.localScale = new Vector3(shrine_hp_percentage, 1.0f, 1.0f);
+
+        shrine_transform.Rotate(0, 2.0f * Time.deltaTime * 3.0f, 0); // Rotate the shrine continuously
 
     }
 
