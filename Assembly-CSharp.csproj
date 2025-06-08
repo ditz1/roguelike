@@ -74,6 +74,7 @@
     <Compile Include="Assets\scripts\BootstrapTransport.cs" />
     <Compile Include="Assets\scripts\ClientNetworkAnimator.cs" />
     <Compile Include="Assets\scripts\DungeonManager.cs" />
+    <Compile Include="Assets\scripts\Structure.cs" />
     <Compile Include="Assets\scripts\HelloWorldManager.cs" />
     <Compile Include="Assets\scripts\DecorSpawner.cs" />
     <Compile Include="Assets\scripts\PlayerController.cs" />

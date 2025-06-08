@@ -43,6 +43,8 @@ public class PlayerController : NetworkBehaviour
 
     bool isReloading = false;
 
+    bool single_fire = false; // if not single, auto
+
     //float p_max_velocity = 18.0f;
     float p_move_speed = 8.5f;
     bool isGrounded = false;
@@ -133,7 +135,10 @@ public class PlayerController : NetworkBehaviour
         if (weapon != null)
         {
             LoadWeapon(); // load the weapon and assign it to the player
-        } else {
+            AssignDefaultViewmodel(); // assign initial offset inside weapon container for different weapons
+        }
+        else
+        {
             // call find weapon anyway, will fail, but will at least set weapon_container
             FindWeapon();
             AssignDefaultViewmodel();
@@ -278,6 +283,10 @@ public class PlayerController : NetworkBehaviour
         {
             weapon.transform.localPosition = new Vector3(-0.04f, 0.0f, -0.8f);
         }
+        else if (weapon.name.Contains("glock"))
+        {
+            weapon.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        }
         else if (weapon.name.Contains("build"))
         {
             build_mode = true;
@@ -375,12 +384,26 @@ public class PlayerController : NetworkBehaviour
             }
 
             // Shoot with rate limiting
-            if (Input.GetMouseButton(0) && Time.time >= nextFireTime && !build_mode) // m1
+            if (single_fire)
             {
-                if (!isReloading && curr_ammo_in_mag > 0)
+                if (Input.GetMouseButtonDown(0) && Time.time >= nextFireTime && !build_mode) // m1
                 {
-                    nextFireTime = Time.time + fireRate; // Set next allowed fire time
-                    FireBullet();
+                    if (!isReloading && curr_ammo_in_mag > 0)
+                    {
+                        nextFireTime = Time.time + fireRate; // Set next allowed fire time
+                        FireBullet();
+                    }
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButton(0) && Time.time >= nextFireTime && !build_mode) // m1
+                {
+                    if (!isReloading && curr_ammo_in_mag > 0)
+                    {
+                        nextFireTime = Time.time + fireRate; // Set next allowed fire time
+                        FireBullet();
+                    }
                 }
             }
 
@@ -404,6 +427,7 @@ public class PlayerController : NetworkBehaviour
                 SwapWeapon(1);
                 AdjustFirstPersonHandsPosition();
             }
+            
         }
         else
         {
@@ -507,6 +531,9 @@ public class PlayerController : NetworkBehaviour
         GameObject actualStructure = Instantiate(stuctures[selected_stucture],
                                                previewStructure.transform.position,
                                                previewStructure.transform.rotation);
+
+        Structure newstruct = actualStructure.GetComponent<Structure>();
+        newstruct.isPlaced = true;
 
         Debug.Log("Placed structure: " + actualStructure.name + " at position " + actualStructure.transform.position);
         
@@ -915,6 +942,8 @@ public class PlayerController : NetworkBehaviour
             ammo_reserve = 90;
             fireRate = 0.1f;
             reloadTime = 0.8f;
+            single_fire = false;
+
         }
         else if (weapon.name.Contains("m4a1"))
         {
@@ -922,6 +951,8 @@ public class PlayerController : NetworkBehaviour
             ammo_reserve = 90;
             fireRate = 0.075f;
             reloadTime = 0.65f;
+            single_fire = false;
+
         }
         else if (weapon.name.Contains("vector"))
         {
@@ -929,6 +960,16 @@ public class PlayerController : NetworkBehaviour
             ammo_reserve = 75;
             fireRate = 0.04f;
             reloadTime = 0.45f;
+            single_fire = false;
+
+        }
+        else if (weapon.name.Contains("glock"))
+        {
+            single_fire = true; // glock is single fire
+            mag_capacity = 15;
+            ammo_reserve = 45;
+            fireRate = 0.1f; // slower fire rate for glock
+            reloadTime = 0.4f; // faster reload time for glock
         }
 
         curr_ammo_in_mag = mag_capacity;
@@ -955,6 +996,10 @@ public class PlayerController : NetworkBehaviour
         {
             recoilAmount = 0.2f;
             recoilSpeed = 15f;
+        } else if (weapon.name.Contains("glock"))
+        {
+            recoilAmount = 0.1f;
+            recoilSpeed = 20f;
         }
 
         weapon.transform.localPosition = Vector3.Lerp(weapon.transform.localPosition, new Vector3(0, 0, -1f * recoilAmount), Time.deltaTime * recoilSpeed);
