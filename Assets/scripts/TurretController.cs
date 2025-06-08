@@ -11,6 +11,8 @@ public class TurretController : MonoBehaviour
 
     EnemyController enemyController;
 
+    Bank bank;
+
     bool localIsPlaced = false;
 
     float distance_to_nearest_enemy;
@@ -22,6 +24,7 @@ public class TurretController : MonoBehaviour
     {
         nearest_enemy = null;
         distance_to_nearest_enemy = Mathf.Infinity;
+        bank = GameObject.FindGameObjectWithTag("Bank").GetComponent<Bank>();
     }
 
     // Update is called once per frame
@@ -68,8 +71,9 @@ public class TurretController : MonoBehaviour
             muzzleflash_1.Play();
             if (nearest_enemy != null && nextFireTime >= fireRate)
             {
-                nextFireTime = 0f;                
+                nextFireTime = 0f;
                 enemyController.TakeDamage(5); // Assuming TakeDamage is a method in EnemyController
+                bank.AddToBank(5);
             }
         }
     }

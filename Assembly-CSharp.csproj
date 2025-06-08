@@ -77,6 +77,7 @@
     <Compile Include="Assets\scripts\Structure.cs" />
     <Compile Include="Assets\scripts\HelloWorldManager.cs" />
     <Compile Include="Assets\scripts\DecorSpawner.cs" />
+    <Compile Include="Assets\scripts\Bank.cs" />
     <Compile Include="Assets\scripts\PlayerController.cs" />
     <Compile Include="Assets\scripts\BarrierControl.cs" />
     <Compile Include="Assets\scripts\CheckpointLogic.cs" />

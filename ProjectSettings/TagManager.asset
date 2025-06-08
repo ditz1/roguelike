@@ -9,6 +9,7 @@ TagManager:
   - Shrine
   - Zomb
   - Barrier
+  - Bank
   layers:
   - Default
   - TransparentFX

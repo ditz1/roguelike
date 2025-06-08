@@ -750,7 +750,7 @@ public class PlayerController : NetworkBehaviour
         
         if (Input.GetKeyDown(KeyCode.F)) // m1
         {
-            PickUpWeapon();
+            Interact();
         }
     }
    
@@ -813,7 +813,7 @@ public class PlayerController : NetworkBehaviour
         
     }
 
-    void PickUpWeapon()
+    void Interact()
     {
         // first shoot ray forward from camera to check if we hit a collider of a weapon
         if (weapon_container == null)
@@ -842,6 +842,13 @@ public class PlayerController : NetworkBehaviour
                 weapon.transform.localScale = new Vector3(1, 1, 1);
                 Debug.Log("Created new weapon: " + newWeapon.name + " at position " + newWeapon.transform.position);
                 LoadWeapon();
+            }
+            else if (hitObject.tag == "Bank")
+            {
+                Bank bank = hitObject.GetComponent<Bank>();
+                int cash_to_add = bank.SubtractFromBank(50);
+                player_cash += cash_to_add;
+
             }
         }
     }
