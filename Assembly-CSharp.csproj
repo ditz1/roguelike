@@ -68,29 +68,45 @@
   <ItemGroup>
     <Compile Include="Assets\scripts\HUDManager.cs" />
     <Compile Include="Assets\scripts\Helpers.cs" />
+    <Compile Include="Assets\OBJImport\StringExtensions.cs" />
     <Compile Include="Assets\scripts\TurretController.cs" />
     <Compile Include="Assets\scripts\Steamworks.NET\SteamManager.cs" />
     <Compile Include="Assets\scripts\EnemyController.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\DDSLoader.cs" />
     <Compile Include="Assets\scripts\BootstrapTransport.cs" />
     <Compile Include="Assets\scripts\ClientNetworkAnimator.cs" />
     <Compile Include="Assets\scripts\DungeonManager.cs" />
     <Compile Include="Assets\scripts\Structure.cs" />
     <Compile Include="Assets\scripts\HelloWorldManager.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\ImageUtils.cs" />
+    <Compile Include="Assets\OBJImport\OBJObjectBuilder.cs" />
     <Compile Include="Assets\scripts\DecorSpawner.cs" />
     <Compile Include="Assets\scripts\Bank.cs" />
     <Compile Include="Assets\scripts\PlayerController.cs" />
     <Compile Include="Assets\scripts\BarrierControl.cs" />
+    <Compile Include="Assets\OBJImport\OBJLoaderHelper.cs" />
     <Compile Include="Assets\scripts\CheckpointLogic.cs" />
     <Compile Include="Assets\scripts\PlayerAnimator.cs" />
     <Compile Include="Assets\scripts\LinearBulletMovement.cs" />
     <Compile Include="Assets\scripts\Shrine.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\TGALoader.cs" />
+    <Compile Include="Assets\OBJImport\CharWordReader.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\BMPLoader.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\BinaryExtensions.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\ColorExtensions.cs" />
     <Compile Include="Assets\scripts\ZombSpawner.cs" />
     <Compile Include="Assets\scripts\EnemySpawner.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\ImageLoader.cs" />
+    <Compile Include="Assets\OBJImport\TextureLoader\ImageLoaderHelper.cs" />
     <Compile Include="Assets\scripts\EnemyWalker.cs" />
     <Compile Include="Assets\scripts\GameManager.cs" />
+    <Compile Include="Assets\OBJImport\Samples\ObjFromFile.cs" />
+    <Compile Include="Assets\OBJImport\Samples\ObjFromStream.cs" />
     <Compile Include="Assets\scripts\EnemyBomber.cs" />
     <Compile Include="Assets\scripts\ClientNetworkTransform.cs" />
+    <Compile Include="Assets\OBJImport\MTLLoader.cs" />
     <Compile Include="Assets\scripts\CheckpointManager.cs" />
+    <Compile Include="Assets\OBJImport\OBJLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -1122,6 +1138,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Polybrush.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Netcode.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -1162,6 +1182,10 @@
       <HintPath>Library\ScriptAssemblies\Unity.Multiplayer.Center.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Unity.Polybrush">
+      <HintPath>Library\ScriptAssemblies\Unity.Polybrush.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Unity.Splines">
       <HintPath>Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
       <Private>False</Private>
@@ -1188,6 +1212,14 @@
     </Reference>
     <Reference Include="PPv2URPConverters">
       <HintPath>Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Rendering.LightTransport.Editor">
@@ -1220,6 +1252,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Collections.Editor">
@@ -1284,6 +1320,10 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.VisualScripting.State">
